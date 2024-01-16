@@ -14,7 +14,8 @@ author:
   email: susan.vanderplas@unl.edu
 short-title: Perceptual Judgements on 3D Printed Bar Charts
 output:
-  jds.rmd::pdf_article: default
+  jds.rmd::pdf_article: 
+    extra_dependencies: "subfig"
 affiliation:
 - institution: "University of Nebraska-Lincoln"
   prefix: Department of Statistics
@@ -31,13 +32,7 @@ preamble: |
   \PassOptionsToPackage{dvipsnames}{xcolor} 
   \newcommand{\svp}[1]{{\textcolor{ForestGreen}{#1}}} 
   \newcommand{\tw}[1]{{\textcolor{Red}{#1}}}
-abstract: "The use of 3D data visualizations has limitations when the third dimension
-  does not convey any additional information to the viewer. Numerous studies advocate
-  to avoid these types of graphs whenever possible, but these studies are almost entirely
-  focused on the 2D projections of the 3D graphs. This paper describes the partial
-  replication of a well-known paper in data visualization and its adaptation to focus
-  on 3D printed bar charts. While current results from our study do not show differences
-  between 2D and 3D graphs, we will use this study to provide a baseline for future studies dealing with graphics in 3D environments.\n"
+abstract: "Graphical design principles typically recommend minimizing the dimensionality of a visualization - for instance, using only 2 dimensions for bar charts rather than providing a 3D rendering, because this extra complexity may result in a decrease in accuracy. This advice has been oft repeated, but the underlying experimental evidence is focused on fixed 2D projections of 3D charts. In this paper, we describe an experiment which attempts to establish whether the decrease in accuracy extends to 3D virtual renderings and 3D printed charts. We replicate the grouped bar chart comparisons in the  1984 Cleveland & McGill study, assessing the accuracy of numerical estimates using different types of 3D and 2D renderings."
 keywords:
 - graphics
 - 3D bar charts
@@ -56,7 +51,7 @@ library(tidyverse)
 library(RSQLite)
 library(lme4)
 
-con = dbConnect(SQLite(), '../../experiment_interface/department.db')
+con = dbConnect(SQLite(), '../2022-Tyler-3D_Graphical_Perception/experiment_interface/department.db')
 dbListTables(con)
 results = dbReadTable(con, 'results')
 users = dbReadTable(con, 'user')
@@ -77,8 +72,8 @@ results = results %>%
 
 
 
-load('../../experiment_interface/data/set85data.Rdata')
-load('../../experiment_interface/data/kits.Rdata')
+load('../2022-Tyler-3D_Graphical_Perception/experiment_interface/data/set85data.Rdata')
+load('../2022-Tyler-3D_Graphical_Perception/experiment_interface/data/kits.Rdata')
 
 
 trueRatios = datasets %>% 
@@ -103,50 +98,78 @@ res = results %>%
 ```
 
 # Introduction
+Good communication requires both that the information be transmitted correctly and that the intended recipient be able to decode and understand the transmitted information accurately. In order to communicate effectively, we must use graphical forms that accurately convey information relevant to the task in question. In many cases, this means we must understand how accurately people can read quantitative information off of charts. While accuracy is not the only quantity of interest in graphical investigations [@hullmanPursuitErrorSurvey2019], it is an important factor in assessing the utility of many different data graphics.
+
+The accuracy of graphical forms has been studied for almost a century [@vonhuhnFurtherStudiesGraphic1927;@eellsRelativeMeritsCircles1926;@croxtonGraphicComparisonsBars1932;@croxtonBarChartsCircle1927], as new ways of representing information evolve, we must revisit old studies to determine whether these representations have the same limitations as previous versions. This is particularly true in areas like graphics which are affected by the immense technological innovation in hardware and software which has taken place since the early 1990s.
 
 ## Elementary Graphical Tasks
-@cleveland_graphical_1984 published a paper that sets up the foundation for how accurately people extract quantitative information using elementary perceptual tasks (EPTs). 
+@clevelandGraphical1984 established the comparative accuracy of different "elementary perceptual tasks" (EPTs).
 Elementary Perceptual Tasks, according to these experiments, include assessing graphical elements such as position along a common scale, length, angle, and volume, and estimating the corresponding numerical value of these representations.
-They found that estimates of ratios between positions along a common scale had smaller log errors than estimates of ratios between lengths. The study relied entirely on estimation accuracy, which may not always be relevant when extracting information from graphs. For example, estimation is less relevant when ordering values by size.
-@heerCrowdsourcingGraphicalPerception2010b replicated some parts of @cleveland_graphical_1984 in an online setting using Mechanical Turk, largely replicating the results of the original study while demonstrating the utility of the Mechanical Turk platform.
-<!-- While the two experiments in their paper highlighted the accuracy for position, length, and angle EPTs, they theorized that the accuracy of judgements using volume was worse than that for judgments using position along a common scale.  -->
+The study relied entirely on estimation accuracy, which may not always be relevant when extracting information from graphs. For example, estimation is less relevant when ordering values by size.
+As a result of the Cleveland and McGill [-@clevelandGraphical1984] study, it is possible to assemble an ordering of perceptual accuracy for the elements of length, position, and angle. 
+@heerCrowdsourcingGraphicalPerception2010b replicated some parts of @clevelandGraphical1984 in an online setting using Mechanical Turk, largely validating the results of the original study while demonstrating the utility of the Mechanical Turk platform for graphical testing.
 
-Further studies have shown that 3D graphs are less accurate at portraying numeric information that 2D graphs [@barfield_effects_1989;@fisher_data_1997]. In certain contexts and conditions, there is some research suggesting that 3D graphs may better encode information \citep{brath_3d_2014}.
+The first experiment in @clevelandGraphical1984 (the position-length experiment), used five types of bar charts: two types of grouped bar charts and three types of stacked bar charts.
+Each chart had two bars marked for comparison; participants were asked to determine which bar was smaller and give the  perceived ratio of the smaller bar to the larger bar. @fig-bar-types show the two types of grouped bar charts. 
+We are primarily interested in the grouped bar charts (in part because 3D printing is not yet inexpensive enough to make moderate-scale stacked bar chart experiments viable), which consisted of two comparison bars which were either adjacent or in separate groups.
+These grouped bar charts will be referenced as adjacent and separated graph types in this paper, respectively.
+
+```{r bar-types}
+#| message: false
+#| error: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| fig-cap: "@clevelandGraphical1984 used two different types of grouped bar charts, which are replicated here."
+#| fig-subcap: 
+#|    - "Adjacent"
+#|    - "Separated"
+#| layout-ncol: 2
+library(ggplot2)
+
+datasets$data[[1]] %>%
+  ggplot(aes(x = Group, y = Height, group = GroupOrder)) + 
+  geom_col(position = "dodge", fill = "white", color = "black") + 
+  geom_text(aes(x = Group, y = 5, group = GroupOrder, label = IDchr), position = position_dodge(0.9)) + 
+  theme_bw() + 
+  theme(axis.title = element_blank(), axis.text.x = element_blank()) + 
+  ggtitle("Adjacent Chart")
+
+
+datasets$data[[1]] %>%
+  ggplot(aes(x = factor(Order %%2), y = Height, group = GroupOrder)) + 
+  geom_col(position = "dodge", fill = "white", color = "black") + 
+  geom_text(aes(x = factor(Order %%2), y = 5, group = GroupOrder, label = IDchr), position = position_dodge(0.9)) + 
+  theme_bw() + 
+  theme(axis.title = element_blank(), axis.text.x = element_blank()) + 
+  ggtitle("Separated Chart")
+
+```
+
+
 
 ## 3D Graphical Perception
 Chart perception is often affected by the visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial and largely exist in two dimensions.
-This occasionally causes problems: the line-width illusion, for instance, has been attributed to implicit 3D perception of two-dimensional stimuli and can affect perception of error bands, candlestick plots, and Sankey diagrams [@vanderplasSignsSineIllusion2015;@daySineIllusion1991;@hofmannCommonAnglePlots2013].
+This occasionally causes problems: the line-width illusion, for instance, has been attributed to implicit 3D perception of 2D stimuli and can affect perception of error bands, candlestick plots, and Sankey diagrams [@vanderplasSignsSineIllusion2015;@daySineIllusion1991;@hofmannCommonAnglePlots2013].
 
 
 The use of 3D graphics have been explored in multiple studies. 
-@fisher_data_1997 explored the preference of using either 2D or 3D graphs and found that subjects tended to use simpler 2D graphs when tasked with extracting information. @barfield_effects_1989 compared 2D and 3D graphs presented on paper and on computers.
-Their results showed that the accuracy of subject answers depended on their skill level. 
-Novice subjects were more accurate with 2D paper graphs and experienced managers were more accurate with 3D computer graphs. 
-For both experience levels, participants were more confident in their answers using 2D graphs over other presentations of data. 
-There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may better encode information.
-@brath_3d_2014 highlights the intrinsic attributes of 3D graphs and its benefits when used appropriately with other 3D elements such as lighting and correct portrayal of data attributes.
+@fisher_data_1997 explored user preference for 2D or 3D charts and found that subjects tended to prefer simpler 2D graphs when tasked with extracting information. 
+@barfield_effects_1989 compared 2D and 3D graphs presented on paper and on computers, showing that the accuracy of subject answers depended on their skill level: novice subjects were more accurate with 2D paper graphs, while experienced managers were more accurate with 3D computer graphs. 
+For both experience levels, participants were more confident in their answers when using 2D graphs. 
+There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may better encode information - for instance, when X and Y are used to represent spatial dimensions, it may be preferable to use a 3D chart to convey numerical information instead of using color, which is perceived much less accurately.
+@brath_3d_2014 highlights the intrinsic attributes of 3D graphs and the benefits when used appropriately with other 3D elements such as lighting and correct portrayal of data attributes.
+
 
 There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data. 
-However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since 2014. 
+However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since Heer's replication study [-@heerCrowdsourcingGraphicalPerception2010b] in 2010.  
 Digital graphics has developed quickly, along with the hardware necessary to support these software developments. 
-As a result, we have much more natural rendering of 3D objects virtually, and we can also print graphics in three dimensions, moving the artificial charts into a more natural setting.
-As a result, it is reasonable to reconsider the use of 3D charts, not only because of technological developments, but because these charts provide the opportunity to make visual graphics accessible to those with limited or absent vision.
+As a result, we have much more natural rendering of 3D objects virtually, and we can also print graphics in three dimensions, moving artificial charts into a more natural, physical setting.
+As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because these charts provide the opportunity to make data graphics accessible to those with limited or absent vision.
 
 
-Here, we provide the process of replication and modernization of testing perceptual judgments to 2D graphs, 3D graphs projected in 2D environments, and 3D printed bar graphs.
-
-
-
-## Selected Components from Cleveland and McGill
-
-Cleveland and McGill provided a theory and tested for the ordering of perceptual importance for the elements of length, position, and angle. 
-Their first experiment, referenced as the position-length experiment, used five types of bar charts.
-Two of these were grouped bar charts and the other three were stacked bar charts.
-Each chart had two bars used for comparison and participants were asked to determine which bar was smaller and give their perceived ratio of the smaller bar to the larger bar.
-The two grouped bar charts are for the perceptual element of position along a common scale, where one has zero distance between bars and the other has a fixed distance between bars.
-These grouped bar charts will be referenced as adjacent and separated graph types in this paper, respectively.
-
-Our study replicates the procedure for the comparisons of the two grouped bar charts, but with an objective of detecting differences in accuracy between 2D graphs, 3D digital graphs, and 3D printed graphs.
+In this paper, we discuss a study designed to examine Cleveland & McGill's experiments on grouped bar charts using modern graphics in two and three dimensions. This study lays the groundwork for additional empirical studies on the use of 3D graphics, rendered and 3D printed, for visualizing complex data. In order to explore perception of fully 3D graphics, it is prudent to start with the simplest possible 3D graphic: one in which the third dimension is not necessary, so that we can easily compare to two-dimensional representations without loss of information. <!-- This is included because of a graphics paper section comment that really annoyed me -->
+In the next section we provide details about design and execution of our experiment, including the process of replicating stimuli from @clevelandGraphics1984 in order to create 2D, 3D projected, 3D rendered, and 3D printed bar graphs. The next section presents the results, and we conclude the paper by discussing this experiment in the context of existing work on the perception of 2D and 3D graphical elements. 
 
 
 # Methods
@@ -179,7 +202,7 @@ There are some graphical elements that cannot be easily portrayed via 3D printin
 <!-- The aspect ratio of the 2d plots (including only the bars is 2:1), while the aspect ratio of the 3d printed charts is 11:9.5. This is something we probably need to fix.... Until then, let's not go there -->
 
 ```{r plotTypes, fig.cap = "Two dimensional, two-dimensional digital rendering, and 3D-printed charts used in this study.", out.width = "100%"}
-knitr::include_graphics("plot-types.png", dpi = 300)
+knitr::include_graphics("_images/plot-types.png", dpi = 300)
 ```
 
 The ggplot2 [@ggplot2] package was utilized to create the 2D bar charts. 
@@ -208,13 +231,13 @@ We printed 21 kits containing five 3d-printed charts each.
 <!-- Each graph is randomly assigned either an adjacent or separated comparison. -->
 
 ```{r studyDesign, fig.cap = "A graphical representation of the study design. Only five of the seven ratios were used in each kit where the ratios are randomly selected. A total of 21 kits were created to include all combinations of the five ratios."}
-knitr::include_graphics("study-design.png")
+knitr::include_graphics("_images/study-design.png")
 ```
 
 
 ## Participant Recruitment
 
-One interesting facet of @cleveland_graphical_1984 is the participant recruitment methodology: "For each experiment the subjects fell into two categories: (1) a group of females, mostly housewives, without substantial technical experience; (2) a mixture of males and females with substantial technical training and working in technical jobs. 
+One interesting facet of @clevelandGraphical1984 is the participant recruitment methodology: "For each experiment the subjects fell into two categories: (1) a group of females, mostly housewives, without substantial technical experience; (2) a mixture of males and females with substantial technical training and working in technical jobs. 
 Most of the subjects in the position-length experiment participated in the position-angle experiment; in all cases repeat subjects judged the position-angle graphs first." 
 It would seem likely that the authors recruited individuals within their respective departments as well as their wives.
 In the spirit of replicating the study, members of the UNL Statistics department and their spouses, partners, and roommates were asked to participate in our study; this replicates the spirit of the original study without the implicit assumptions that graduate students and professors are (1) largely male, (2) heterosexual, and (3) have unemployed partners.
@@ -289,14 +312,14 @@ Participants provided informed consent through the applet, and then were asked f
 Then, participants were shown a "practice" page which allowed them to experiment with the data collection interface and practice estimating the ratio between the bars, as shown in Figure \@ref(fig:practice)
 
 ```{r practice, fig.cap = "Screenshot of Shiny application practice screen. Three 2D bar charts with different ratios were provided, along with sliders indicating the correct proportion. Participants could practice with the sliders and preview the questions that would be asked as part of the task.", out.width = "80%"}
-knitr::include_graphics("03-Practice-2.png")
+knitr::include_graphics("_images/03-Practice-2.png")
 ```
 
 Directly before the experiment started, participants were asked to provide the kit ID, along with directions indicating that if the instructions indicated that participants should use a 3D chart for a task, the participant should select a chart from the kit, enter the ID code of that chart from the bottom of the object, and complete the requested task.
 Participants were also instructed to make quick judgments for each graph and not to measure or estimate ratios using physical objects.
 
 ```{r experiment3dRender, fig.cap = "Screenshot of the applet collecting data for a 3D rendered chart task. Participants were asked to select which bar (circle or triangle) was smaller, and then to estimate the ratio of the smaller bar to the larger bar.", out.width = "80%"}
-knitr::include_graphics("05-Experiment-05-filled-in.png")
+knitr::include_graphics("_images/05-Experiment-05-filled-in.png")
 ```
 
 Each graph (or prompt, in the case of 3D printed charts) in the applet had two corresponding questions for participants to answer: first, participants were to identify the smaller bar by shape, and then, participants were to estimate the ratio of the size of the smaller bar to the size of the larger bar, as shown in Figure \@ref(fig:experiment3dRender). 
@@ -339,7 +362,7 @@ res %>%
   theme_bw() +
   theme(legend.position = 'bottom')
 ```
-This is somewhat different than the results in @cleveland_graphical_1984 and @heerCrowdsourcingGraphicalPerception2010b; in both cases the midmean log absolute errors increased until about 55% of the true proportional difference and then decreased.
+This is somewhat different than the results in @clevelandGraphical1984 and @heerCrowdsourcingGraphicalPerception2010b; in both cases the midmean log absolute errors increased until about 55% of the true proportional difference and then decreased.
 It is possible that this difference is due to the fact that we did not require an explicit numerical estimate of the ratio but instead asked participants to indicate the ratio on a slider (which is essentially a number line). 
 This should reduce the cognitive load required to transition from spatial comparison to numerical comparison and then to compute the proportion, but may also have impacted the results.
 
@@ -378,7 +401,7 @@ While Heer \& Bostock provided a zip file containing data and code for their pap
 Previous work in 3D graphics would suggest that the errors for the 3D graphs would be larger than the errors for the 2D graphs. 
 While we did not find any significant results indicating that 3D graphs are read less accurately, there are two possibilities that might account for this discrepancy. 
 
-The first potential explanation is that this study is underpowered - the effect size is small, and our 48 participants were insufficient; the original study included 51 participants, which is slightly larger. However, we should note that the analysis methods used in @heerCrowdsourcingGraphicalPerception2010b and @cleveland_graphical_1984 do not include significance testing beyond the graphical display of confidence intervals.
+The first potential explanation is that this study is underpowered - the effect size is small, and our 48 participants were insufficient; the original study included 51 participants, which is slightly larger. However, we should note that the analysis methods used in @heerCrowdsourcingGraphicalPerception2010b and @clevelandGraphical1984 do not include significance testing beyond the graphical display of confidence intervals.
 
 The second possibility is more interesting: we examined 3D charts using rendered 3D graphs and 3D printed charts; both of these options allow for participants to interact with the chart, rotating it, and generally perceiving it as one might perceive any other 3D, real, object.
 This is a far cry from the 3D perspective charts in the original study, which have a fixed angle and perspective and are thus not equivalent to our 3D charts. 
