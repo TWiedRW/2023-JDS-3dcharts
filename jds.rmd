@@ -155,11 +155,14 @@ While this illusion is problematic in 2D, when the depth cues are actually prese
 
 
 ```{r sine-illusion}
+#| message: false
+#| error: false
+#| warning: false
 #| cache: false
 #| fig-width: 4
 #| fig-height: 4
 #| out-width: "30%"
-#| fig-cap: "An illustration of the sine illusion\\citep{vanderplasSignsSineIllusion2015}, also known as the line-width illusion. All vertical lines in figures (a) and (c) are the same length, but the lines in the middle of the curve appear to be much shorter. The illusion results when implicit perceptual corrections useful for perceiving the size of objects with depth are applied to 2D stimuli with no actual depth."
+#| fig-cap: "An illustration of the sine illusion\\citep{vanderplasSignsSineIllusion2015}, also known as the line-width illusion. All vertical lines are the same length, but the lines in the middle of the curve appear to be much shorter. The illusion results when implicit perceptual corrections useful for perceiving the size of objects with depth are applied to 2D stimuli with no actual depth. As 3D heuristics occasionally cause inaccurate communication when applied to 2D objects, it is reasonable to think that there might be some situations where charts making use of a realistic third dimension might be perceived more accurately than their 2D equivalents."
 #| fig-subcap:
 #|    - "Sine Illusion"
 #|    - "3D surface with similar features"
@@ -485,23 +488,25 @@ The scale axis was removed, leaving only the bars and a bar grouping identifier.
 The bars used for comparisons had the identifying mark at a height of 5 out of 100 for the 2D plots, and the 3D plots had the identifying marks on top of the bars.
 
 The 3D renderings and 3D printed charts were both created using OpenSCAD [@kintelOpenSCADDocumentation2023], which creates STL files from markup describing the object's geometric composition. 
-Charts were composed of a platform, raised labels for the A and B groups of bars, circle and triangle markers indicating the bars of interest, and the bars themselves; values for the bar heights were inserted into the markup using R [@R].
-In addition, an ID code was engraved into the bottom of the platform to uniquely identify each object; this allows the researchers to ensure that the 3D printed charts are correctly allocated to stimulus sets.
+Charts were composed of a platform, with raised text labels centered in front of the A and B groups of bars. Bars were created by inserting bar heights into the OpenSCAD template using R, and then raised circle and triangle markers were positioned on top of the bars to be compared to provide a tactile and visual indicator.
+In addition, an ID code was engraved into the bottom of the platform to uniquely identify each object; this allowed the researchers to ensure that each kit contained the correct charts throughout the experiment while minimizing the risk of stickers or other identifiers becoming detached from the charts.
+As printed, the base of each chart was 13cm x 3cm x 1cm, with the highest bar rising 9.5cm above the chart base.
+Raised letters and shapes were 2mm above the base or bar, respectively.
+The color of the filament used to print each chart corresponded to the estimation ratio (though this was not obvious to participants), allowing the researchers to quickly determine that a kit of 3D charts contained no ratio duplication.
+Colors were randomly assigned to ratios so that participants could not gain information about the ratio from any perceived ordering of the colors. 
 
-Digital renderings of the generated STL files were created using @rgl, which integrates into @shiny using the @mozillafoundationWebGL2D3D2023 extension.
-Rendered 3D charts were initially angled corresponding to the default 3D bar charts present in Microsoft Excel, but WebGL's interactivity allows the user to rotate, scale, and otherwise interact with the chart to change the angle. 3D renderings were colored to correspond to the 3D printed chart filament color.
+Digital renderings of the generated STL files were created using RGL [@rgl], which integrates into Shiny [@shiny] using the WebGL [@mozillafoundationWebGL2D3D2023] extension.
+The RGL rendering of the STL file was initially angled to correspond to the perspective of default 3D bar charts present in Microsoft Excel, but in the WebGL interactive environment, participants could rotate the charts as they pleased to create a useful estimate of the bar ratio. 
+Rendered charts were colored to correspond with the filament color used to print the physical chart for consistency.
 The default `rgl` lighting was replaced with three lights located in fixed positions around the rendered figure. 
 The lights were positioned so that one was behind the rendered figure<!--(x: 910, y: -1000, z:1000)-->, another in front of the figure<!--(x: 780, y: 1030, z: 1000)-->, and one light below the figure<!--(x: 65, y: 15, z: -100)-->.
-3D charts were printed with colored filament corresponding to a specific ratio comparison; this allowed researchers to visually assess kits to ensure that they contained five unique ratios.
-Colors corresponding to each ratio were assigned randomly to ensure that chart color provided no useful information about the ratio value.
-As printed, the base of the chart was 13cm x 3cm x 1cm, with the highest bar rising 9.5cm above the chart base.
-Raised letters and shapes were 2mm above the base or bar, respectively.
+This arrangement provided a consistent visual experience and minimized shadows that prevented visual estimation of the bars.
+
 
 ## Experiment Design
 
-Participants were provided a kit with five 3D-printed charts, comprising five of the seven unique ratio comparisons; we then used the kit ID to ensure that participants saw computer-rendered charts with ratios corresponding to those in the kit of physical charts.
-This ensured that the experimental design was balanced across chart type and randomized with respect to the type of comparison (adjacent or separated).
-We printed 21 kits containing five 3d-printed charts each.
+Participants were provided a kit with five 3D-printed charts corresponding to five of the seven unique ratio comparisons. In the Shiny application, we asked participants for the kit ID, which was used to look up the corresponding digital renderings. This ensured that the experimental design was balanced across chart type and randomized with respect to the type of comparison (adjacent or separated).
+We printed 21 kits containing five 3d-printed charts each, where 2 of the 7 ratios were randomly removed from the total set.
 <!-- There are 21 kits in total so that each combination of ratios is accounted for. -->
 <!-- Each graph is randomly assigned either an adjacent or separated comparison. -->
 
@@ -613,26 +618,38 @@ They also added 1/8 to prevent distortions when the errors were close to zero.
 @heerCrowdsourcingGraphicalPerception2010b followed the same analysis method, replicating many (but not all) of the results presented in the original paper.
 
 Figure \@ref(fig:midmeans-log-errors) shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type. 
-The results tend to indicate that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types.
+The results suggest that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. In addition, there is a tendency
 
-```{r midmeans-log-errors, fig.cap='Midmeans of log absolute errors for the true ratio of bars. Each overlaying line are computed with loess.', message=FALSE, warning=FALSE, out.width='80%'}
+```{r midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='80%'}
 plot.types = c('2D', 'Rendered 3D', '3D Printed')
 names(plot.types) = c('2dDigital', '3dDigital', '3dPrint')
 
 
 
-res %>% 
+tmp <- res %>% 
   group_by(Height, graphtype, plot) %>% 
-  summarize(midmean = mean(response, trim=0.25, na.rm = T)) %>% 
-  ggplot(mapping = aes(x = Height, y = midmean,
-                       color = graphtype)) +
-  geom_point() +
-  geom_smooth(se = F, alpha=1/2) +
+  summarize(midmean = mean(response, trim=0.25, na.rm = T)) %>%
+  mutate(type = "Midmean") %>%
+  rename(response = midmean)
+
+
+res %>% 
+  mutate(type = "Raw Data") %>%
+  bind_rows(tmp) %>%
+  # group_by(Height, graphtype, plot) %>% 
+  ggplot(mapping = aes(x = Height*100, y = response,
+                       color = graphtype, fill = graphtype)) +
+  geom_smooth(se = T, alpha=.125,  expand = F, method = "loess") +
+  geom_point(aes(shape = type, alpha = type, size = type)) +
+  scale_shape_manual("Data", values = c(19, 1)) + 
+  scale_size_manual("Data", values = c(2, 1)) + 
+  scale_alpha_manual("Data", values = c(1, .25)) + 
   scale_color_discrete(labels = c('Adjacent', 'Separated')) +
+  scale_x_continuous(limits = c(0, 100)) + 
   facet_wrap(~plot, labeller = labeller(plot = plot.types)) +
   labs(title = '',
        x = 'True Proportional Difference (%)',
-       y = 'Midmeans of Log Error',
+       y = 'Log Error',
        color = 'Comparison Type') +
   theme_bw() +
   theme(legend.position = 'bottom')
