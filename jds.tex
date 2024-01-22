@@ -66,7 +66,7 @@ The accuracy of graphical forms has been studied for almost a century \citep{von
 Elementary Perceptual Tasks, according to these experiments, include assessing graphical elements such as position along a common scale, length, angle, and volume, and estimating the corresponding numerical value of these representations.
 The study relied entirely on estimation accuracy, which may not always be relevant when extracting information from graphs. For example, estimation is less relevant when ordering values by size.
 As a result of the Cleveland and McGill \citeyearpar{clevelandGraphical1984} study, it is possible to assemble an ordering of perceptual accuracy for the elements of length, position, and angle.
-\citet{heerCrowdsourcingGraphicalPerception2010b} replicated some parts of \citet{clevelandGraphical1984} in an online setting using Mechanical Turk, largely validating the results of the original study while demonstrating the utility of the Mechanical Turk platform for graphical testing.
+\citet{heerCrowdsourcingGraphicalPerception2010b} replicated some parts of \citet{clevelandGraphical1984} in an online setting using Mechanical Turk, a platform for crowdsourcing human tasks that has been used for (among other things) assembling machine learning datasets. This replication study largely validated the results of the original study while demonstrating the utility of the Mechanical Turk platform for graphical testing.
 
 The first experiment in \citet{clevelandGraphical1984} (the position-length experiment), used five types of bar charts: two types of grouped bar charts and three types of stacked bar charts.
 Each chart had two bars marked for comparison; participants were asked to determine which bar was smaller and give the perceived ratio of the smaller bar to the larger bar. \Cref{fig:bar-types} shows the two types of grouped bar charts.
@@ -80,26 +80,29 @@ These grouped bar charts will be referenced as adjacent and separated graph type
 \hypertarget{d-graphical-perception}{%
 \subsection{3D Graphical Perception}\label{d-graphical-perception}}
 
-Chart perception is often affected by the visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial and largely exist in two dimensions.
-This occasionally causes problems: the line-width illusion\citep{vanderplasSignsSineIllusion2015, daySineIllusion1991, hofmannCommonAnglePlots2013}, for instance, has been attributed to implicit 3D perception of 2D stimuli and can affect perception of error bands, candlestick plots, and Sankey diagrams (a simplified example is shown in \Cref{fig:sine-illusion}.
-While this illusion is problematic in 2D, when the depth cues are actually present in a three-dimensional situation, the same perceptual heuristics contribute to accurate size perception. Thus, there is reason to think that perceptual accuracy may be dependent on the realism of the stimuli.
+Chart perception is affected by the human visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial.
+In addition, these artificial stimuli are typically created and presented in two dimensions.
+The artificial scenes we create for data visualization have been documented to cause problems: for instance, the line-width illusion \citep{vanderplasSignsSineIllusion2015, daySineIllusion1991, hofmannCommonAnglePlots2013} has been attributed to implicit 3D perception of 2D stimuli and can affect perception of error bands, candlestick plots, hammock plots, and Sankey diagrams. The line width illusion causes lines or error bands which are actually the same length to appear shorter at points with large amounts of curvature; a simple example of the classic sine illusion (one version of the line width illusion) is shown in \Cref{fig:sine-illusion}.
+While this illusion is problematic in two dimensions, when the depth cues are actually present in a three-dimensional situation, the same implicit visual heuristics contribute to accurate size perception (as in the middle panel of \Cref{fig:sine-illusion}).
+Thus, there is reason to think that perceptual accuracy may be dependent on the realism of the visual display relative to the training of the visual system and the heuristics which are activated in order to make sense of the display.
 
 \begin{figure}
 \subfloat[Sine Illusion\label{fig:sine-illusion-1}]{\includegraphics[width=0.33\linewidth]{jds_files/figure-latex/sine-illusion-1} }\subfloat[3D surface with similar features\label{fig:sine-illusion-2}]{\includegraphics[width=0.33\linewidth]{jds_files/figure-latex/sine-illusion-2} }\subfloat[Perceived vs. actual length\label{fig:sine-illusion-3}]{\includegraphics[width=0.33\linewidth]{jds_files/figure-latex/sine-illusion-3} }\caption{An illustration of the sine illusion\citep{vanderplasSignsSineIllusion2015}, also known as the line-width illusion. All vertical lines are the same length, but the lines in the middle of the curve appear to be much shorter. The illusion results when implicit perceptual corrections useful for perceiving the size of objects with depth are applied to 2D stimuli with no actual depth. As 3D heuristics occasionally cause inaccurate communication when applied to 2D objects, it is reasonable to think that there might be some situations where charts making use of a realistic third dimension might be perceived more accurately than their 2D equivalents.}\label{fig:sine-illusion}
 \end{figure}
 
-The use of 3D graphics have been explored in multiple studies.
+The use of 3D graphics have been explored in multiple studies, with mixed results.
 \citet{fisher_data_1997} explored user preference for 2D or 3D charts and found that subjects tended to prefer simpler 2D graphs when tasked with extracting information.
 \citet{barfield_effects_1989} compared 2D and 3D graphs presented on paper and on computers, showing that the accuracy of subject answers depended on their skill level: novice subjects were more accurate with 2D paper graphs, while experienced managers were more accurate with 3D computer graphs.
 For both experience levels, participants were more confident in their answers when using 2D graphs.
 There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may provide a more natural way to encode information, at least in theory. For instance, when X and Y are used to represent spatial dimensions, it may be preferable to use a 3D chart to convey numerical information instead of using color, which is perceived much less accurately.
 \citet{brath_3d_2014} highlights the intrinsic attributes of 3D graphs and the benefits when used appropriately with other 3D elements such as lighting and correct portrayal of data attributes.
+Nevertheless, it is extremely common in visualization literature to recommend that 3D plots be avoided at all costs \citep{vanderplasTestingStatisticalCharts2020, wilkeDonGo3D2020, morganwallIntroducing3DGgplots20191006}.
 
-There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data \citep{vanderplasTestingStatisticalCharts2020, wilkeDonGo3D2020, morganwallIntroducing3DGgplots20191006}.
+There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data \citep{huffHowLieStatistics1954}.
 However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since Heer's replication study \citeyearpar{heerCrowdsourcingGraphicalPerception2010b} in 2010.\\
-Digital graphics have developed quickly, along with the hardware necessary to support these software developments.
-As a result, we have much more natural rendering of 3D objects virtually, and we can also print graphics in three dimensions, moving artificial charts into a more natural, physical setting.
-As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because these charts provide the opportunity to make data graphics accessible to those with limited or absent vision \citep{fleetHowTactileGraphics2023}.
+Computer graphics and rendering technology have developed quickly, along with the hardware necessary to support these software developments.
+As a result, we have much more natural virtual rendering of 3D objects, and we can also print graphics in three dimensions using mass-market, relatively inexpensive 3D printers, moving artificial charts into a more natural, physical setting.
+As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because 3D printed charts provide the opportunity to make data graphics accessible to those with limited or absent vision \citep{fleetHowTactileGraphics2023}.
 
 In this paper, we discuss a study designed to examine Cleveland \& McGill's experiments on grouped bar charts using modern graphics in two and three dimensions. This study lays the groundwork for additional empirical studies on the use of 3D graphics, rendered and 3D printed, for visualizing complex data. In order to explore perception of fully 3D graphics, it is prudent to start with the simplest possible 3D graphic: one in which the third dimension is not necessary, so that we can easily compare to two-dimensional representations without loss of information.
 In the next section we provide details about design and execution of our experiment, including the process of replicating stimuli from \citet{clevelandGraphical1984} in order to create 2D, 3D projected, 3D rendered, and 3D printed bar graphs. The next section presents the results, and we conclude the paper by discussing this experiment in the context of existing work on the perception of 2D and 3D graphical elements.
@@ -305,6 +308,12 @@ s(participant) & 27.0449 & 34.0000 & 4.7264 & 0.0000\\
 \end{figure}
 
 While \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g.~slider vs.~numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
+
+Model diagnostic plots show slight violations of normality with the error term, particularly with right-skewed residuals.
+Plots of the data for each ratio tend to suggest that some participants might have tried rounding to the ratio increments of fives and tens.
+For example, participants tended to favor estimating the ratio of 0.562 to around 0.5.
+Since linear models are reasonably robust to violations of normality, we will assume that the model reasonably fits.
+Plots of the residual diagnostics can be found under the supplemental material in \Cref{fig:residualplots}.
 
 \hypertarget{interactivity-with-3d-rendered-charts}{%
 \subsection{Interactivity with 3D Rendered Charts}\label{interactivity-with-3d-rendered-charts}}

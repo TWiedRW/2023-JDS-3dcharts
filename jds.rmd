@@ -780,6 +780,14 @@ newdata %>%
 
 While \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g. slider vs. numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
 
+Model diagnostic plots show slight violations of normality with the error term, particularly with right-skewed residuals.
+Plots of the data for each ratio tend to suggest that some participants might have tried rounding to the ratio increments of fives and tens. 
+For example, participants tended to favor estimating the ratio of 0.562 to around 0.5.
+Since linear models are reasonably robust to violations of normality, we will assume that the model reasonably fits.
+Plots of the residual diagnostics can be found under the supplemental material in \Cref{fig:residualplots}.
+
+
+
 ## Interactivity with 3D Rendered Charts
 
 
@@ -825,6 +833,34 @@ Future iterations of this experiment will likely address this estimation differe
 ## Supplemental Material
 Stimuli, code, and data for this experiment are provided at [https://github.com/TWiedRW/2023-JDS-3dcharts](https://github.com/TWiedRW/2023-JDS-3dcharts).
 
+```{r residualplots, include = F}
+#| fig-width: 3
+#| fig-height: 3
+#| fig-cap: "Residual diagnostic plots for the linear mixed model."
+#| fig-subcap:
+#| - Fitted vs. predicted residuals
+#| - Q-Q plot
+#| out-width: ".49\\linewidth"
+#| fig-show: "hold"
+#| layout-ncol: 2
 
+r = residuals(mod)
+p = predict(mod)
+
+ggplot(mapping = aes(x = p, y = r)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, linetype = 'dashed', color = 'red') + 
+  theme_bw() + 
+  labs(x = 'Fitted value',
+       y = 'Residual')
+
+ggplot(mapping = aes(sample = r)) + 
+  geom_qq() + 
+  geom_qq_line(color = 'red', linetype = 'dashed') + 
+  theme_bw() + 
+  labs(x = 'Theoretical Quantiles',
+       y = 'Sample Quantiles')
+
+```
 
 
