@@ -837,7 +837,7 @@ res %>%
 res %>%
   filter(plot == "3dDigital") %>%
   ggplot(aes(x = plot3dClicks, y = response)) + geom_point() + 
-  xlab("# Clicks on WebGL Plot") + ylab("Count") + ggtitle("Accuracy and Participant Interactivity") + 
+  xlab("# Clicks on WebGL Plot") + ylab("Log Error") + ggtitle("Accuracy and Participant Interactivity") + 
   geom_smooth(method = "lm", se = T) + 
   theme_bw()
 ```
