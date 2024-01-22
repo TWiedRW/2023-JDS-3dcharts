@@ -438,11 +438,10 @@ The use of 3D graphics have been explored in multiple studies.
 @fisher_data_1997 explored user preference for 2D or 3D charts and found that subjects tended to prefer simpler 2D graphs when tasked with extracting information. 
 @barfield_effects_1989 compared 2D and 3D graphs presented on paper and on computers, showing that the accuracy of subject answers depended on their skill level: novice subjects were more accurate with 2D paper graphs, while experienced managers were more accurate with 3D computer graphs. 
 For both experience levels, participants were more confident in their answers when using 2D graphs. 
-There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may better encode information - for instance, when X and Y are used to represent spatial dimensions, it may be preferable to use a 3D chart to convey numerical information instead of using color, which is perceived much less accurately.
+There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may provide a more natural way to encode information, at least in theory. For instance, when X and Y are used to represent spatial dimensions, it may be preferable to use a 3D chart to convey numerical information instead of using color, which is perceived much less accurately. 
 @brath_3d_2014 highlights the intrinsic attributes of 3D graphs and the benefits when used appropriately with other 3D elements such as lighting and correct portrayal of data attributes.
 
-
-There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data. 
+There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data [@vanderplasTestingStatisticalCharts2020;@wilkeDonGo3D2020;@morganwallIntroducing3DGgplots20191006]. 
 However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since Heer's replication study [-@heerCrowdsourcingGraphicalPerception2010b] in 2010.  
 Digital graphics have developed quickly, along with the hardware necessary to support these software developments. 
 As a result, we have much more natural rendering of 3D objects virtually, and we can also print graphics in three dimensions, moving artificial charts into a more natural, physical setting.
