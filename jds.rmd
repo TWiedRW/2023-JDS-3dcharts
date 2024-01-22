@@ -53,7 +53,7 @@ library(tidyverse)
 library(RSQLite)
 library(lme4)
 
-con = dbConnect(SQLite(), '../2022-Tyler-3D_Graphical_Perception/experiment_interface/department.db')
+con = dbConnect(SQLite(), '_data/department.db')
 dbListTables(con)
 results = dbReadTable(con, 'results')
 users = dbReadTable(con, 'user')
@@ -74,8 +74,8 @@ results = results %>%
 
 
 
-load('../2022-Tyler-3D_Graphical_Perception/experiment_interface/data/set85data.Rdata')
-load('../2022-Tyler-3D_Graphical_Perception/experiment_interface/data/kits.Rdata')
+load('_data/set85data.Rdata')
+load('_data/kits.Rdata')
 
 
 trueRatios = datasets %>% 
@@ -151,11 +151,13 @@ datasets$data[[1]] %>%
 
 
 ## 3D Graphical Perception
+
 Chart perception is affected by the human visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial. 
 In addition, these artificial stimuli are typically created and presented in two dimensions.
 The artificial scenes we create for data visualization have been documented to cause problems: for instance, the line-width illusion [@vanderplasSignsSineIllusion2015;@daySineIllusion1991;@hofmannCommonAnglePlots2013] has been attributed to implicit 3D perception of 2D stimuli and can affect perception of error bands, candlestick plots, hammock plots, and Sankey diagrams. The line width illusion causes lines or error bands which are actually the same length to appear shorter at points with large amounts of curvature; a simple example of the classic sine illusion (one version of the line width illusion) is shown in \Cref{fig:sine-illusion}. 
 While this illusion is problematic in two dimensions, when the depth cues are actually present in a three-dimensional situation, the same implicit visual heuristics contribute to accurate size perception (as in the middle panel of \Cref{fig:sine-illusion}). 
 Thus, there is reason to think that perceptual accuracy may be dependent on the realism of the visual display relative to the training of the visual system and the heuristics which are activated in order to make sense of the display. 
+
 
 
 ```{r sine-illusion}
@@ -470,10 +472,41 @@ These values for the bar heights are linear on a log scale and are given by
 
 
 Each graph presents two bars from the values given above where the participants are asked to judge the ratio of the smaller bar to the larger bar. The ratio of bars used by Cleveland and McGill were 17.8, 26.1, 38.3, 46.4 (twice), 56.2, 68.1 (twice), and 82.5 (twice).
-The exact numeric comparisons were not disclosed, but the comparison values used in our study were subjected to the constraints of having the same ratio values and that no value was used more than twice. \svp{Can we show the comparison values in a table?}
+The exact numeric comparisons were not disclosed, but the comparison values used in our study were subjected to the constraints of having the same ratio values and that no value was used more than twice.
 
-\svp{In each graph, there are two sets of five bars each, and two of the bars are marked for identification with a circle and triangle}, \svp{as in \Cref{fig:bar-types}.}
-Cleveland and McGill did not specify the random process for the heights of the eight other bars, so we used a scaled Beta distribution with parameters that limit excessive noise around the bars used for comparisons.\svp{What does excessive noise mean??}
+```{r experiment-values}
+library(papaja)
+extract_values <- function(data){
+  data %>% 
+    dplyr::filter(!is.na(IDchr)) %>% 
+    dplyr::select(Height)
+}
+
+datasets %>% 
+  mutate(setID = str_extract(file, 'id-[0-9]{2}')) %>% 
+  filter(fileID < 15) %>% 
+  mutate(vals = map(data, extract_values)) %>% 
+  unnest(vals) %>% 
+  mutate(Height = round(Height,1)) %>% 
+  group_by(fileID) %>% 
+  mutate(Bar = ifelse(Height == min(Height), 'Smaller', 'Larger')) %>% 
+  ungroup() %>% 
+  select(fileID, Height, Bar, setID) %>% 
+  filter(fileID %% 2 == 1) %>% 
+  mutate(setID = paste0('ID: ', str_remove(setID, 'id-'))) %>% 
+  select(-fileID) %>% 
+  pivot_wider(names_from = Bar, values_from = Height) %>% 
+  mutate(`Ratio (%)` = round(Smaller/Larger,3)*100) %>% arrange(`Ratio (%)`) %>% 
+  pivot_longer(Smaller:`Ratio (%)`, values_to = 'Height', names_to = 'Bar') %>% 
+  pivot_wider(names_from = setID, values_from = Height) %>% 
+  apa_table(caption = 'Values used in the experiment to make ratio comparisons, sorted by ratio. The ID label corresponds to the file reference number.') 
+
+```
+
+
+
+In each graph, there are two sets of five bars each, and two of the bars are marked for identification with a circle and triangle, as in \Cref{fig:bar-types}.
+Cleveland and McGill did not specify the random process for the heights of the eight other bars, so we used a scaled Beta distribution to provide random structure around our fixed values.
 Code to reproduce the data generation process, data underlying the plots used in this study, the rendered plots and STL files, anonymized user data, and analysis code can found be at [https://github.com/TWiedRW/2023-JDS-3dcharts](https://github.com/TWiedRW/2023-JDS-3dcharts). 
 
 ## Stimuli Construction
@@ -629,7 +662,7 @@ They also added 1/8 to prevent distortions when the errors were close to zero.
 @heerCrowdsourcingGraphicalPerception2010b followed the same analysis method, replicating many (but not all) of the results presented in the original paper.
 
 \Cref{fig:midmeans-log-errors} shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type. 
-The results suggest that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. In addition, there is a tendency
+The results suggest that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. 
 
 ```{r midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='\\textwidth'}
 plot.types = c('2D', 'Rendered 3D', '3D Printed')
@@ -701,6 +734,7 @@ library(lme4)
 
 mod <- lmer(response ~ (1|subject) + ratioLabel + plot + type,
             data = res)
+
 modsum <- summary(mod)
 modaov <- anova(mod)
 modaovsum <- summary(modaov)
@@ -840,7 +874,7 @@ Stimuli, code, and data for this experiment are provided at [https://github.com/
 #| fig-subcap:
 #| - Fitted vs. predicted residuals
 #| - Q-Q plot
-#| out-width: ".49\\linewidth"
+#| out-width: ".40\\linewidth"
 #| fig-show: "hold"
 #| layout-ncol: 2
 
@@ -862,5 +896,6 @@ ggplot(mapping = aes(sample = r)) +
        y = 'Sample Quantiles')
 
 ```
+
 
 
