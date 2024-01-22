@@ -234,7 +234,7 @@ This differs from \citet{clevelandGraphical1984}, but maintains the spirit of th
 \hypertarget{results}{%
 \section{Results}\label{results}}
 
-All responses (\(n = 32\)) that incorrectly identified the smaller bar were removed from the study before analysis; this serves as a basic attention check.
+All responses (\(n = 33\)) that incorrectly identified the smaller bar were removed from the study before analysis; this serves as a basic attention check. In addition, one trial was removed because the participant did not enter a valid ID for a 3D printed chart.
 
 \hypertarget{midmeans-of-log-absolute-errors}{%
 \subsection{Midmeans of Log Absolute Errors}\label{midmeans-of-log-absolute-errors}}
@@ -263,32 +263,45 @@ This pattern is more noticable in separated (Type 3) comparisons, which also mak
 \hypertarget{generalized-additive-model}{%
 \subsection{Generalized Additive Model}\label{generalized-additive-model}}
 
-In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a generalized additive model that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. The formal statistical model is as follows:
+In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a generalized additive model \citep{hastie2017generalized} that accounts for participant variation as well as the effect of comparison type, graph type, and ratio.
 
-\[y_{ijklm}= s(R_j * T_l) + s(R_j *G_k) + T_l + G_k + s(S_i) + \epsilon_{ijklm}\]
+We define the following effects:
+
+\begin{itemize}
+\item
+  \(R\), the numerical ratio of A/B where A is the length of the smaller bar and B is the length of the larger bar. There are \(i=1, ..., 7\) levels of \(R\) in this study, but we will treat \(R\) as a numeric variable throughout this model.
+\item
+  \(D_j\), the display mode, where \(j = 1, 2, 3\) correspond to 2D, 3D rendered, and 3D printed charts respectively.
+\item
+  \(T_k\), the type of comparison, where \(k = 1, 2\) correspond to adjacent (Type 1) and separated (Type 3) comparisons, respectively
+\item
+  \(P_l\), a random effect for participant which describes the overall skill of the participant at visual estimation of ratios.
+\end{itemize}
+
+Generalized additive models depend on a smooth function \(s(): \mathbb{R}\rightarrow\mathbb{R}\) which is applied to the independent variables; by default, the smooth function is created using thin-plate regression splines. In place of an interaction term when a categorical variable is involved, separate smooths are fit for each level of the categorical variable; we will indicate this by subscripting the smooth function with the categorical variable index, so that \(s^T_1(R)\) indicates the smooth over numerical variable \(R\) for the 1st level of the categorical variable T, that is, the smooth function over \(R\) for adjacent comparisons.
+
+Then the formal statistical model is as follows:
+
+\[y= s^D_j(R) + s^T_k(R) + D_j + T_k + P_l + \epsilon\]
 
 \noindent where
 
 \begin{itemize}
 \item
-  \(y_{ijklm}=\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)\)
+  \(y=\log_2(|\text{Judged Percent}_{ijkl} - \text{True Percent}_{ij}|+1/8)\)
 \item
-  \(s(S_i)\) is the random effect of the \(i^{th}\) subject
+  \(s^D_j(R)\) is a thin-plate spline function for R accounting for the display type
 \item
-  \(s(R_j*T_l)\) is the effect of the \(j^{th}\) ratio, by comparison type
+  \(s^T_k(R)\) is a thin-plate spline function for R accounting for the comparison type
 \item
-  \(s(R_j*G_k)\) is the effect of the \(j^{th}\) ratio, by display type
+  \(D_j\) is the fixed effect of the display type (e.g.~an intercept term)
 \item
-  \(T_l\) is the effect of the \(l^{th}\) comparison type
+  \(T_k\) is the fixed effect of the \(k^{th}\) comparison type
 \item
-  \(G_k\) is the effect of the \(k^{th}\) display type
+  \(P_l\) is the random effect of the \(l^{th}\) participant
 \item
-  \(\epsilon_{ijklm}\sim N(0,\sigma^2_\epsilon)\) is the random error
+  \(\epsilon\) is the random error
 \end{itemize}
-
-A generalized additive model with random effects for subject was fit using the \texttt{mgcv} package \citep{mgcv1, mgcv2, mgcv3}. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \Cref{fig:midmeans-log-errors}; cumulative predictions for fixed effects are shown in \Cref{fig:gam-pred-chart}. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in \citet{hollandsBiasProportionJudgments2000}.
-
-While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only 42 trials (8.79\%) had slider values at exactly 0.5, and all but 6 were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth.
 
 \begin{table}
 
@@ -320,16 +333,21 @@ s(Ratio):plot3dPrint & 1.0003 & 1.0005 & 2.4488 & 0.1183\\
 s(Ratio):typeSeparated & 4.2371 & 4.7338 & 5.8074 & 0.0001\\
 s(Ratio):typeAdjacent & 1.0007 & 1.0014 & 3.5452 & 0.0604\\
 \addlinespace
-s(participant) & 27.0449 & 34.0000 & 4.7276 & 0.0000\\
+s(participant) & 27.0449 & 34.0000 & 4.7199 & 0.0000\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+A generalized additive model with random effects for subject was fit using the \texttt{mgcv} package \citep{mgcv1, mgcv2, mgcv3}. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \Cref{fig:midmeans-log-errors}; cumulative predictions for fixed effects are shown in \Cref{fig:gam-pred-chart}. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in \citet{hollandsBiasProportionJudgments2000}.
+Residuals from the model indicate that there is some left skew in the tails, but this is not extreme; code for this analysis can be found in the supplemental materials on github.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{jds_files/figure-latex/gam-pred-chart-1} \caption{Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. }\label{fig:gam-pred-chart}
 \end{figure}
 
-While \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g.~slider vs.~numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
+While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only 42 trials (8.81\%) had slider values at exactly 0.5, and all but 6 were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth.
+
+\citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, but this link has not been updated and is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g.~slider vs.~numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
 
 \hypertarget{interactivity-with-3d-rendered-charts}{%
 \subsection{Interactivity with 3D Rendered Charts}\label{interactivity-with-3d-rendered-charts}}

@@ -1,7 +1,7 @@
 \documentclass[letterpaper,inpress,dvipsnames]{jdsart}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL initialsubmission.tex   Sun Jan 21 19:15:37 2024
-%DIF ADD jds.tex                 Mon Jan 22 00:30:32 2024
+%DIF DEL initialsubmission.tex   Sun Jan 21 16:09:36 2024
+%DIF ADD jds.tex                 Mon Jan 22 11:57:26 2024
 
 \setcounter{page}{1}
 \pubmonth{July}
@@ -224,13 +224,35 @@ These values for the bar heights are linear on a log scale and are given by
 \[s_i=10\cdot 10^{(i-1)/12}, \qquad i=1,...,10\]
 
 Each graph presents two bars from the values given above where the participants are asked to judge the ratio of the smaller bar to the larger bar. The ratio of bars used by Cleveland and McGill were 17.8, 26.1, 38.3, 46.4 (twice), 56.2, 68.1 (twice), and 82.5 (twice).
-The exact numeric comparisons were not disclosed, but the comparison values used in our study were subjected to the constraints of having the same ratio values and that no value was used more than twice. \DIFaddbegin {\DIFadd{\textcolor{ForestGreen}{Can we show the comparison values in a table?}}}
-\DIFaddend 
+The exact numeric comparisons were not disclosed, but the comparison values used in our study were subjected to the constraints of having the same ratio values and that no value was used more than twice.
 
-\DIFdelbegin \DIFdel{Each graph is presented so that there are ten bars where only two of the bars are marked for identification.
-}\DIFdelend \DIFaddbegin {\DIFadd{\textcolor{ForestGreen}{In each graph, there are two sets of five bars each, and two of the bars are marked for identification with a circle and triangle}}}\DIFadd{, }{\DIFadd{\textcolor{ForestGreen}{as in \Cref{fig:bar-types}.}}}
-\DIFaddend Cleveland and McGill did not specify the random process for the heights of the eight other bars, so we used a scaled Beta distribution with parameters that limit excessive noise around the bars used for comparisons.\DIFaddbegin {\DIFadd{\textcolor{ForestGreen}{What does excessive noise mean??}}}
-\DIFaddend Code to reproduce the data generation process, data underlying the plots used in this study, the rendered plots and STL files, anonymized user data, and analysis code can found be at \url{https://github.com/TWiedRW/2023-JDS-3dcharts}.
+\DIFdelbegin \DIFdel{Each graphis presented so that there are ten bars where only }\DIFdelend \DIFaddbegin \begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:experiment-values}\DIFaddFL{Values used in the experiment to make ratio comparisons, sorted by ratio. The ID label corresponds to the file reference number.}}
+
+\begin{tabular}{llllllll}
+\toprule
+\DIFaddFL{Bar }& \multicolumn{1}{c}{ID: 01} & \multicolumn{1}{c}{ID: 06} & \multicolumn{1}{c}{ID: 05} & \multicolumn{1}{c}{ID: 04} & \multicolumn{1}{c}{ID: 02} & \multicolumn{1}{c}{ID: 03} & \multicolumn{1}{c}{ID: 09}\\
+\midrule
+\DIFaddFL{Smaller }& \DIFaddFL{10.00 }& \DIFaddFL{14.70 }& \DIFaddFL{14.70 }& \DIFaddFL{12.10 }& \DIFaddFL{10.00 }& \DIFaddFL{12.10 }& \DIFaddFL{26.10}\\
+\DIFaddFL{Larger }& \DIFaddFL{56.20 }& \DIFaddFL{56.20 }& \DIFaddFL{38.30 }& \DIFaddFL{26.10 }& \DIFaddFL{17.80 }& \DIFaddFL{17.80 }& \DIFaddFL{31.60}\\
+\DIFaddFL{Ratio (\%) }& \DIFaddFL{17.80 }& \DIFaddFL{26.20 }& \DIFaddFL{38.40 }& \DIFaddFL{46.40 }& \DIFaddFL{56.20 }& \DIFaddFL{68.00 }& \DIFaddFL{82.60}\\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+\DIFadd{In each graph, there are two sets of five bars each, and }\DIFaddend two of the bars are marked for identification \DIFaddbegin \DIFadd{with a circle and triangle, as in \mbox{%DIFAUXCMD
+\Cref{fig:bar-types}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
+Cleveland and McGill did not specify the random process for the heights of the eight other bars, so we used a scaled Beta distribution \DIFdelbegin \DIFdel{with parameters that limit excessive noise around the bars used for comparisons}\DIFdelend \DIFaddbegin \DIFadd{to provide random structure around our fixed values}\DIFaddend .
+Code to reproduce the data generation process, data underlying the plots used in this study, the rendered plots and STL files, anonymized user data, and analysis code can found be at \url{https://github.com/TWiedRW/2023-JDS-3dcharts}.
 
 \hypertarget{stimuli-construction}{%
 \subsection{Stimuli Construction}\label{stimuli-construction}}
@@ -369,7 +391,9 @@ This differs from \mbox{%DIFAUXCMD
 \hypertarget{results}{%
 \section{Results}\label{results}}
 
-All responses \DIFaddbegin \DIFadd{(\(n = 32\)) }\DIFaddend that incorrectly identified the smaller bar were removed from the study before analysis\DIFaddbegin \DIFadd{; this serves as a basic attention check}\DIFaddend .
+All responses \DIFaddbegin \DIFadd{(\(n = 33\)) }\DIFaddend that incorrectly identified the smaller bar were removed from the study before analysis\DIFdelbegin \DIFdel{.
+}\DIFdelend \DIFaddbegin \DIFadd{; this serves as a basic attention check. In addition, one trial was removed because the participant did not enter a valid ID for a 3D printed chart.
+}\DIFaddend 
 
 \hypertarget{midmeans-of-log-absolute-errors}{%
 \subsection{Midmeans of Log Absolute Errors}\label{midmeans-of-log-absolute-errors}}
@@ -386,8 +410,7 @@ They also added 1/8 to prevent distortions when the errors were close to zero.
 \DIFdelbegin \DIFdel{Figure \ref{fig:midmeans-log-errors} }\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
 \Cref{fig:midmeans-log-errors} }\hskip0pt%DIFAUXCMD
 }\DIFaddend shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type.
-The results \DIFdelbegin \DIFdel{tend to indicate }\DIFdelend \DIFaddbegin \DIFadd{suggest }\DIFaddend that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. \DIFaddbegin \DIFadd{In addition, there is a tendency
-}\DIFaddend 
+The results \DIFdelbegin \DIFdel{tend to indicate }\DIFdelend \DIFaddbegin \DIFadd{suggest }\DIFaddend that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types.
 
 \begin{figure}
 \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.8\linewidth]{jds_files/figure-latex/midmeans-log-errors-1} %%%
@@ -414,44 +437,59 @@ This pattern is more noticable in separated (Type 3) comparisons, which also mak
 \subsection{Generalized Additive Model}\label{generalized-additive-model}}
 \DIFaddend 
 
-In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a \DIFdelbegin \DIFdel{linear mixed effects }\DIFdelend \DIFaddbegin \DIFadd{generalized additive }\DIFaddend model that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. \DIFdelbegin \DIFdel{This allows us to test for significant differences (though given the midmean log absolute error plots, we do not expect to find any) as well as to quantify effect sizes for future studies. }\DIFdelend The formal statistical model is as follows:
+In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a \DIFdelbegin \DIFdel{linear mixed effects model }\DIFdelend \DIFaddbegin \DIFadd{generalized additive model \mbox{%DIFAUXCMD
+\citep{hastie2017generalized} }\hskip0pt%DIFAUXCMD
+}\DIFaddend that accounts for participant variation as well as the effect of comparison type, graph type, and ratio.
+\DIFdelbegin \DIFdel{This allows us to test for significant differences (though given the midmean log absolute error plots, we do not expect to find any) as well as to quantify effect sizes for future studies.
+The }\DIFdelend \DIFaddbegin 
 
-\[y_{ijklm}= \DIFdelbegin \DIFdel{\mu+S_i+}\DIFdelend \DIFaddbegin \DIFadd{s(}\DIFaddend R_j \DIFaddbegin \DIFadd{* T_l) }\DIFaddend + \DIFdelbegin \DIFdel{G}\DIFdelend \DIFaddbegin \DIFadd{s}\DIFaddend (R\DIFaddbegin \DIFadd{_j *G_k}\DIFaddend ) \DIFdelbegin \DIFdel{_{(k)j}}\DIFdelend + T_l + \DIFaddbegin \DIFadd{G_k + s(S_i) + }\DIFaddend \epsilon_{ijklm}\]
+\DIFadd{We define the following effects:
+}
+
+\begin{itemize}
+\item
+  \DIFadd{\(R\), the numerical ratio of A/B where A is the length of the smaller bar and B is the length of the larger bar. There are \(i=1, ..., 7\) levels of \(R\) in this study, but we will treat \(R\) as a numeric variable throughout this model.
+}\item
+  \DIFadd{\(D_j\), the display mode, where \(j = 1, 2, 3\) correspond to 2D, 3D rendered, and 3D printed charts respectively.
+}\item
+  \DIFadd{\(T_k\), the type of comparison, where \(k = 1, 2\) correspond to adjacent (Type 1) and separated (Type 3) comparisons, respectively
+}\item
+  \DIFadd{\(P_l\), a random effect for participant which describes the overall skill of the participant at visual estimation of ratios.
+}\end{itemize}
+
+\DIFadd{Generalized additive models depend on a smooth function \(s(): \mathbb{R}\rightarrow\mathbb{R}\) which is applied to the independent variables; by default, the smooth function is created using thin-plate regression splines. In place of an interaction term when a categorical variable is involved, separate smooths are fit for each level of the categorical variable; we will indicate this by subscripting the smooth function with the categorical variable index, so that \(s^T_1(R)\) indicates the smooth over numerical variable \(R\) for the 1st level of the categorical variable T, that is, the smooth function over \(R\) for adjacent comparisons.
+}
+
+\DIFadd{Then the }\DIFaddend formal statistical model is as follows:
+
+\[y\DIFdelbegin \DIFdel{_{ijklm}}\DIFdelend = \DIFdelbegin \DIFdel{\mu+S_i+R}\DIFdelend \DIFaddbegin \DIFadd{s^D}\DIFaddend _j\DIFaddbegin \DIFadd{(R) }\DIFaddend + \DIFdelbegin \DIFdel{G}\DIFdelend \DIFaddbegin \DIFadd{s^T_k}\DIFaddend (R) \DIFdelbegin \DIFdel{_{(k)j}}\DIFdelend + \DIFaddbegin \DIFadd{D_j + }\DIFaddend T\DIFaddbegin \DIFadd{_k + P}\DIFaddend _l + \epsilon\DIFdelbegin \DIFdel{_{ijklm}}\DIFdelend \]
 
 \noindent where
 
 \begin{itemize}
 \item
-  \(y_{ijklm}=\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)\)
-\item
-  \DIFdelbegin \DIFdel{\(S_i\sim N(0,\sigma^2_S)\) is the }\DIFdelend \DIFaddbegin \DIFadd{\(s(S_i)\) is the random }\DIFaddend effect of the \(i^{th}\) subject
-\item
-  \DIFdelbegin \DIFdel{\(R_j\) }\DIFdelend \DIFaddbegin \DIFadd{\(s(R_j*T_l)\) }\DIFaddend is the effect of the \(j^{th}\) ratio\DIFaddbegin \DIFadd{, by comparison type
+  \DIFdelbegin \DIFdel{\(y_{ijklm}=\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)\)
+}\DIFdelend \DIFaddbegin \DIFadd{\(y=\log_2(|\text{Judged Percent}_{ijkl} - \text{True Percent}_{ij}|+1/8)\)
 }\DIFaddend \item
-  \DIFdelbegin \DIFdel{\(G(R)_{(k)j}\) }\DIFdelend \DIFaddbegin \DIFadd{\(s(R_j*G_k)\) }\DIFaddend is the effect of the \DIFdelbegin \DIFdel{\(k^{th}\) graph type nested in the }\DIFdelend \(j^{th}\) ratio\DIFaddbegin \DIFadd{, by display type
+  \DIFdelbegin \DIFdel{\(S_i\sim N(0,\sigma^2_S)\) is the effect of the \(i^{th}\) subject
+}\DIFdelend \DIFaddbegin \DIFadd{\(s^D_j(R)\) is a thin-plate spline function for R accounting for the display type
 }\DIFaddend \item
-  \(T_l\) is the effect of the \(l^{th}\) comparison type
-\item
-  \DIFaddbegin \DIFadd{\(G_k\) is the effect of the \(k^{th}\) display type
+  \DIFdelbegin \DIFdel{\(R_j\) is the }\DIFdelend \DIFaddbegin \DIFadd{\(s^T_k(R)\) is a thin-plate spline function for R accounting for the comparison type
 }\item
-  \DIFaddend \(\epsilon_{ijklm}\sim N(0,\sigma^2_\epsilon)\) is the random error
+  \DIFadd{\(D_j\) is the fixed }\DIFaddend effect of the \DIFdelbegin \DIFdel{\(j^{th}\) ratio
+}\DIFdelend \DIFaddbegin \DIFadd{display type (e.g.~an intercept term)
+}\DIFaddend \item
+  \DIFdelbegin \DIFdel{\(G(R)_{(k)j}\) is the }\DIFdelend \DIFaddbegin \DIFadd{\(T_k\) is the fixed }\DIFaddend effect of the \(k^{th}\) \DIFdelbegin \DIFdel{graph type
+nested in the \(j^{th}\) ratio
+}\DIFdelend \DIFaddbegin \DIFadd{comparison type
+}\DIFaddend \item
+  \DIFdelbegin \DIFdel{\(T_l\) is the }\DIFdelend \DIFaddbegin \DIFadd{\(P_l\) is the random }\DIFaddend effect of the \(l^{th}\) \DIFdelbegin \DIFdel{comparison type
+}\DIFdelend \DIFaddbegin \DIFadd{participant
+}\DIFaddend \item
+  \DIFdelbegin \DIFdel{\(\epsilon_{ijklm}\sim N(0,\sigma^2_\epsilon)\) }\DIFdelend \DIFaddbegin \DIFadd{\(\epsilon\) }\DIFaddend is the random error
 \end{itemize}
 
-\DIFdelbegin \DIFdel{No differences were detected for the true ratio of bars (p-value = .7881) }\DIFdelend \DIFaddbegin \DIFadd{A generalized additive model with random effects for subject was fit using the }\texttt{\DIFadd{mgcv}} \DIFadd{package \mbox{%DIFAUXCMD
-\citep{mgcv1, mgcv2, mgcv3}}\hskip0pt%DIFAUXCMD
-. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \mbox{%DIFAUXCMD
-\Cref{fig:midmeans-log-errors}}\hskip0pt%DIFAUXCMD
-; cumulative predictions for fixed effects are shown in \mbox{%DIFAUXCMD
-\Cref{fig:gam-pred-chart}}\hskip0pt%DIFAUXCMD
-. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0}\DIFaddend , \DIFdelbegin \DIFdel{whether the bars were adjacent or separated (p-value = .3375)}\DIFdelend \DIFaddbegin \DIFadd{.5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in \mbox{%DIFAUXCMD
-\citet{hollandsBiasProportionJudgments2000}}\hskip0pt%DIFAUXCMD
-.
-}
-
-\DIFadd{While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only 42 trials (8.79\%) had slider values at exactly 0.5, and all but 6 were for ratios on either side of 0.5 (.464}\DIFaddend , \DIFdelbegin \DIFdel{or for the plot nested within the true ratio (}\DIFdelend \DIFaddbegin \DIFadd{.562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth.
-}
-
-\begin{table}
+\DIFdelbegin \DIFdel{No differences were detected for the true ratio of bars (}\DIFdelend \DIFaddbegin \begin{table}
 
 \caption{\label{tab:gam-param}\DIFaddFL{Parametric coefficients in gam model.}}
 \centering
@@ -473,8 +511,7 @@ In addition to replicating the (primarily graphical) analysis of participant err
 \centering
 \begin{tabular}[t]{lrrrr}
 \toprule
-\DIFaddFL{Smooth }& \DIFaddFL{edf }& \DIFaddFL{Ref.df }& \DIFaddFL{F }& \DIFaddendFL p-value\DIFdelbeginFL \DIFdelFL{= .6868).
-While Heer \& Bostock }\DIFdelendFL \DIFaddbeginFL \\
+\DIFaddFL{Smooth }& \DIFaddFL{edf }& \DIFaddFL{Ref.df }& \DIFaddFL{F }& \DIFaddendFL p-value\DIFdelbeginFL \DIFdelFL{= .7881) }\DIFdelendFL \DIFaddbeginFL \\
 \midrule
 \DIFaddFL{s(Ratio):plot2dDigital }& \DIFaddFL{0.0005 }& \DIFaddFL{0.0009 }& \DIFaddFL{0.0000 }& \DIFaddFL{0.5000}\\
 \DIFaddFL{s(Ratio):plot3dDigital }& \DIFaddFL{1.7934 }& \DIFaddFL{2.2056 }& \DIFaddFL{1.2807 }& \DIFaddFL{0.2481}\\
@@ -482,30 +519,36 @@ While Heer \& Bostock }\DIFdelendFL \DIFaddbeginFL \\
 \DIFaddFL{s(Ratio):typeSeparated }& \DIFaddFL{4.2371 }& \DIFaddFL{4.7338 }& \DIFaddFL{5.8074 }& \DIFaddFL{0.0001}\\
 \DIFaddFL{s(Ratio):typeAdjacent }& \DIFaddFL{1.0007 }& \DIFaddFL{1.0014 }& \DIFaddFL{3.5452 }& \DIFaddFL{0.0604}\\
 \addlinespace
-\DIFaddFL{s(participant) }& \DIFaddFL{27.0449 }& \DIFaddFL{34.0000 }& \DIFaddFL{4.7264 }& \DIFaddFL{0.0000}\\
+\DIFaddFL{s(participant) }& \DIFaddFL{27.0449 }& \DIFaddFL{34.0000 }& \DIFaddFL{4.7199 }& \DIFaddFL{0.0000}\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\DIFadd{A generalized additive model with random effects for subject was fit using the }\texttt{\DIFadd{mgcv}} \DIFadd{package \mbox{%DIFAUXCMD
+\citep{mgcv1, mgcv2, mgcv3}}\hskip0pt%DIFAUXCMD
+. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \mbox{%DIFAUXCMD
+\Cref{fig:midmeans-log-errors}}\hskip0pt%DIFAUXCMD
+; cumulative predictions for fixed effects are shown in \mbox{%DIFAUXCMD
+\Cref{fig:gam-pred-chart}}\hskip0pt%DIFAUXCMD
+. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0}\DIFaddend , \DIFdelbegin \DIFdel{whether the bars were adjacent or separated (p-value = .3375)}\DIFdelend \DIFaddbegin \DIFadd{.5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in \mbox{%DIFAUXCMD
+\citet{hollandsBiasProportionJudgments2000}}\hskip0pt%DIFAUXCMD
+.
+Residuals from the model indicate that there is some left skew in the tails, but this is not extreme; code for this analysis can be found in the supplemental materials on github.
+}
 
 \begin{figure}
 \includegraphics[width=\textwidth]{jds_files/figure-latex/gam-pred-chart-1} \caption{\DIFaddFL{Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. }}\label{fig:gam-pred-chart}
 \end{figure}
 
-\DIFadd{While \mbox{%DIFAUXCMD
-\citeauthor{heerCrowdsourcingGraphicalPerception2010b} }\hskip0pt%DIFAUXCMD
-}\DIFaddend provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data \DIFdelbegin \DIFdel{at this time.}\DIFdelend \DIFaddbegin \DIFadd{for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g.~slider vs.~numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
-}\DIFaddend 
-
-\DIFaddbegin \DIFadd{Model diagnostic plots show slight violations of normality with the error term, particularly with right-skewed residuals.
-Plots of the data for each ratio tend to suggest that some participants might have tried rounding to the ratio increments of fives and tens.
-For example, participants tended to favor estimating the ratio of 0.562 to around 0.5.
-Since linear models are reasonably robust to violations of normality, we will assume that the model reasonably fits.
-Plots of the residual diagnostics can be found under the supplemental material in \mbox{%DIFAUXCMD
-\Cref{fig:residualplots}}\hskip0pt%DIFAUXCMD
-.
+\DIFadd{While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only 42 trials (8.81\%) had slider values at exactly 0.5, and all but 6 were for ratios on either side of 0.5 (.464}\DIFaddend , \DIFdelbegin \DIFdel{or for the plot nested within the true ratio (p-value = .6868). While Heer \& Bostock }\DIFdelend \DIFaddbegin \DIFadd{.562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth.
 }
 
-\hypertarget{interactivity-with-3d-rendered-charts}{%
+\DIFadd{\mbox{%DIFAUXCMD
+\citeauthor{heerCrowdsourcingGraphicalPerception2010b} }\hskip0pt%DIFAUXCMD
+}\DIFaddend provided a zip file containing data and code for their paper, \DIFdelbegin \DIFdel{the link }\DIFdelend \DIFaddbegin \DIFadd{but this link has not been updated and }\DIFaddend is no longer active, so it is not possible to fit a similar model to their data \DIFdelbegin \DIFdel{at this time.}\DIFdelend \DIFaddbegin \DIFadd{for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g.~slider vs.~numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
+}\DIFaddend 
+
+\DIFaddbegin \hypertarget{interactivity-with-3d-rendered-charts}{%
 \subsection{Interactivity with 3D Rendered Charts}\label{interactivity-with-3d-rendered-charts}}
 
 \DIFadd{When 3D rendered plots were shown, we recorded the number of user interactions (clicks, rotations) with the WebGL plot. \mbox{%DIFAUXCMD

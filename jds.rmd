@@ -96,8 +96,9 @@ res_all = results %>%
 
 res <- res_all %>% 
   filter(whichIsSmaller == 'Triangle (▲)',
-         as.Date.POSIXct(appStartTime) <= '2023-05-22') #Only verified results from before the start of SDSS
-
+         as.Date.POSIXct(appStartTime) <= '2023-05-22') %>% 
+  #Only verified results from before the start of SDSS 
+  filter(!is.na(ratio))
 
 ```
 
@@ -651,7 +652,7 @@ res %>%
 
 # Results
 
-All responses ($n = `r nrow(res_all) - nrow(res)`$) that incorrectly identified the smaller bar were removed from the study before analysis; this serves as a basic attention check.
+All responses ($n = `r nrow(res_all) - nrow(res)`$) that incorrectly identified the smaller bar were removed from the study before analysis; this serves as a basic attention check. In addition, one trial was removed because the participant did not enter a valid ID for a 3D printed chart.
 
 ## Midmeans of Log Absolute Errors
 \citeauthor{clevelandGraphical1984} used 
@@ -708,50 +709,39 @@ This pattern is more noticable in separated (Type 3) comparisons, which also mak
 
 ## Generalized Additive Model
 
-In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a generalized additive model that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. The formal statistical model is as follows:
+In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a generalized additive model [@hastie2017generalized] that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. 
 
-$$y_{ijklm}= s(R_j * T_l) + s(R_j *G_k) + T_l + G_k + s(S_i) + \epsilon_{ijklm}$$
+We define the following effects:
+
+- $R$, the numerical ratio of A/B where A is the length of the smaller bar and B is the length of the larger bar. There are $i=1, ..., 7$ levels of $R$ in this study, but we will treat $R$ as a numeric variable throughout this model.
+
+- $D_j$, the display mode, where $j = 1, 2, 3$ correspond to 2D, 3D rendered, and 3D printed charts respectively.
+
+- $T_k$, the type of comparison, where $k = 1, 2$ correspond to adjacent (Type 1) and separated (Type 3) comparisons, respectively
+
+- $P_l$, a random effect for participant which describes the overall skill of the participant at visual estimation of ratios.
+
+Generalized additive models depend on a smooth function $s(): \mathbb{R}\rightarrow\mathbb{R}$ which is applied to the independent variables; by default, the smooth function is created using thin-plate regression splines. In place of an interaction term when a categorical variable is involved, separate smooths are fit for each level of the categorical variable; we will indicate this by subscripting the smooth function with the categorical variable index, so that $s^T_1(R)$ indicates the smooth over numerical variable $R$ for the 1st level of the categorical variable T, that is, the smooth function over $R$ for adjacent comparisons.
+
+Then the formal statistical model is as follows:
+
+$$y= s^D_j(R) + s^T_k(R) + D_j + T_k + P_l + \epsilon$$
 
 \noindent where
 
-- $y_{ijklm}=\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)$
+- $y=\log_2(|\text{Judged Percent}_{ijkl} - \text{True Percent}_{ij}|+1/8)$
 
-- $s(S_i)$ is the random effect of the $i^{th}$ subject
+- $s^D_j(R)$ is a thin-plate spline function for R accounting for the display type
 
-- $s(R_j*T_l)$ is the effect of the $j^{th}$ ratio, by comparison type
+- $s^T_k(R)$ is a thin-plate spline function for R accounting for the comparison type
 
-- $s(R_j*G_k)$ is the effect of the $j^{th}$ ratio, by display type
+- $D_j$ is the fixed effect of the display type (e.g. an intercept term)
 
-- $T_l$ is the effect of the $l^{th}$ comparison type
+- $T_k$ is the fixed effect of the $k^{th}$ comparison type
 
-- $G_k$ is the effect of the $k^{th}$ display type
+- $P_l$ is the random effect of the $l^{th}$ participant
 
-- $\epsilon_{ijklm}\sim N(0,\sigma^2_\epsilon)$ is the random error
-
-```{r, include=F}
-library(papaja)
-library(lme4)
-
-mod <- lmer(response ~ (1|subject) + ratioLabel + plot + type,
-            data = res)
-
-modsum <- summary(mod)
-modaov <- anova(mod)
-modaovsum <- summary(modaov)
-
-f_df <- as.numeric(length(modsum$residuals)-modsum$ngrps - 1)
-
-apa_lm <- apa_print(mod)
-apa_table(apa_lm$table, caption = "Analysis of Fixed Effects")
-```
-
-
-
-<!-- No differences were detected for the true ratio of bars ($t = `r modsum$coefficients[2,3]`$), whether the bars were adjacent or separated ($t = `r modsum$coefficients[5,3]`$), or for the plot nested within the true ratio ($F(`r modaov$npar[2]`, `r f_df`) = `r modaov[2,4]`$).  -->
-<!-- The form of this linear mixed effects model assumes a linear relationship between ratio and response, but we know from \Cref{fig:midmeans-log-errors} that the actual relationship appears to be nonlinear.  -->
-A generalized additive model with random effects for subject was fit using the `mgcv` package [@mgcv1;@mgcv2;@mgcv3]. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \Cref{fig:midmeans-log-errors}; cumulative predictions for fixed effects are shown in \Cref{fig:gam-pred-chart}. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in @hollandsBiasProportionJudgments2000. 
-
-While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only `r sum(res$byHowMuch == 50)` trials (`r sprintf("%.2f%%", mean(res$byHowMuch==50)*100)`) had slider values at exactly 0.5, and all but `r sum(res$byHowMuch == 50 & !res$ratioLabel %in% c(46.4, 56.2))` were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points  could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth. 
+- $\epsilon$ is the random error
 
 ```{r gam}
 library(mgcv)
@@ -764,7 +754,11 @@ res2 <- res %>%
   mutate(plottype = interaction(plot, type))
 # res2
 
-gam_mod <- gam(response ~ s(ratio_prop, by = plot, k = 6) + s(ratio_prop, by = type, k = 6) +  plot + type + s(participant, bs = "re"),
+gam_mod <- gam(response ~ 
+                 s(ratio_prop, by = plot, k = 6) +
+                 s(ratio_prop, by = type, k = 6) + 
+                 plot + type + 
+                 s(participant, bs = "re"),
                data = res2, method = 'REML')
 # gam_mod
 
@@ -781,6 +775,8 @@ gam_sum$s.table %>% as.data.frame() %>%
   knitr::kable(digits = 4, row.names = F, caption = "Approximate significance of smooth terms in gam model.", label = "gam-smooth", booktabs = T)
 ```
 
+A generalized additive model with random effects for subject was fit using the `mgcv` package [@mgcv1;@mgcv2;@mgcv3]. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \Cref{fig:midmeans-log-errors}; cumulative predictions for fixed effects are shown in \Cref{fig:gam-pred-chart}. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in @hollandsBiasProportionJudgments2000. 
+Residuals from the model indicate that there is some left skew in the tails, but this is not extreme; code for this analysis can be found in the supplemental materials on github.
 
 ```{r gam-pred-chart, fig.cap = "Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. ", fig.width = 7, fig.height = 3, out.width = "\\textwidth"}
 # 
@@ -811,8 +807,43 @@ newdata %>%
 
 ```
 
+```{r residualplots-gam, include = F}
+#| fig-width: 3
+#| fig-height: 3
+#| fig-cap: "Residual diagnostic plots for the linear mixed model."
+#| fig-subcap:
+#| - Fitted vs. predicted residuals
+#| - Q-Q plot
+#| out-width: ".40\\linewidth"
+#| fig-show: "hold"
+#| layout-ncol: 2
 
-While \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g. slider vs. numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques. 
+res2 <- res2 %>%
+  mutate(predict = predict(gam_mod, newdata = res2),
+         resid = response - predict)
+
+ggplot(res2, aes(x = predict, y = resid)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, linetype = 'dashed', color = 'red') + 
+  theme_bw() + 
+  facet_wrap(~plottype,) + 
+  labs(x = 'Fitted value',
+       y = 'Residual')
+
+ggplot(res2, aes(sample = resid)) + 
+  geom_qq() + 
+  geom_qq_line(color = 'red', linetype = 'dashed') + 
+  facet_grid(type ~ plot) + 
+  theme_bw() + 
+  labs(x = 'Theoretical Quantiles',
+       y = 'Sample Quantiles')
+
+```
+
+While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only `r sum(res$byHowMuch == 50)` trials (`r sprintf("%.2f%%", mean(res$byHowMuch==50)*100)`) had slider values at exactly 0.5, and all but `r sum(res$byHowMuch == 50 & !res$ratioLabel %in% c(46.4, 56.2))` were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points  could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth. 
+
+
+\citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, but this link has not been updated and is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g. slider vs. numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques. 
 
 <!---Model diagnostic plots show slight violations of normality with the error term, particularly with right-skewed residuals.
 Plots of the data for each ratio tend to suggest that some participants might have tried rounding to the ratio increments of fives and tens. 
@@ -867,7 +898,26 @@ Future iterations of this experiment will likely address this estimation differe
 ## Supplemental Material
 Stimuli, code, and data for this experiment are provided at [https://github.com/TWiedRW/2023-JDS-3dcharts](https://github.com/TWiedRW/2023-JDS-3dcharts).
 
-```{r residualplots, include = F}
+
+```{r, include=F, eval = F}
+library(papaja)
+library(lme4)
+
+mod <- lmer(response ~ (1|subject) + ratioLabel + plot + type,
+            data = res)
+
+modsum <- summary(mod)
+modaov <- anova(mod)
+modaovsum <- summary(modaov)
+
+f_df <- as.numeric(length(modsum$residuals)-modsum$ngrps - 1)
+
+apa_lm <- apa_print(mod)
+apa_table(apa_lm$table, caption = "Analysis of Fixed Effects")
+```
+
+
+```{r residualplots, include = F, eval = F}
 #| fig-width: 3
 #| fig-height: 3
 #| fig-cap: "Residual diagnostic plots for the linear mixed model."
@@ -898,35 +948,91 @@ ggplot(mapping = aes(sample = r)) +
 ```
 
 
+```{r percent-error-model, eval = F}
+# Model using % error instead of the log2 error...
+
+res3 <- res2 %>%
+  mutate(estimation_error = (byHowMuch - ratioLabel)/(ratioLabel))
+res3 %>% 
+  mutate(type = "Raw Data") %>%
+  ggplot(mapping = aes(x = Height*100, y = estimation_error,
+                       color = graphtype, fill = graphtype)) +
+  geom_smooth(se = T, alpha=.125,  expand = F, method = "loess") +
+  geom_point(aes(shape = type, alpha = type, size = type)) +
+  scale_shape_manual("Data", values = c(19, 1)) + 
+  scale_size_manual("Data", values = c(2, 1)) + 
+  scale_alpha_manual("Data", values = c(1, .25)) + 
+  scale_fill_discrete(labels = c('Adjacent', 'Separated')) +
+  scale_color_discrete(labels = c('Adjacent', 'Separated')) +
+  scale_x_continuous(limits = c(0, 100)) + 
+  facet_wrap(~plot, labeller = labeller(plot = plot.types)) +
+  labs(title = '',
+       x = 'True Proportional Difference (%)',
+       y = 'Log Error',fill = 'Comparison Type',
+       color = 'Comparison Type') +
+  theme_bw() +
+  theme(legend.position = 'bottom')
+gam_mod2 <- gam(estimation_error ~ 
+                 s(ratio_prop, by = plot, k = 6) +
+                 s(ratio_prop, by = type, k = 6) + 
+                 plot + type + 
+                 s(participant, bs = "re"),
+               data = res3, method = 'REML')
+# gam_mod
+
+gam_sum2 <- summary(gam_mod2)
+
+
+gam_sum2$p.table %>% knitr::kable(digits = 4, caption = "Parametric coefficients in gam model.", label = "gam-param", booktabs = T)
+
+gam_sum2$s.table %>% as.data.frame() %>% 
+  mutate(Smooth = rownames(.),
+         Smooth = str_replace(Smooth, "ratio_prop", "Ratio")) %>%
+  select(Smooth, everything()) %>%
+  knitr::kable(digits = 4, row.names = F, caption = "Approximate significance of smooth terms in gam model.", label = "gam-smooth", booktabs = T)
 
 
 
-```{r residualplots-gam, include = F}
-#| fig-width: 3
-#| fig-height: 3
-#| fig-cap: "Residual diagnostic plots for the linear mixed model."
-#| fig-subcap:
-#| - Fitted vs. predicted residuals
-#| - Q-Q plot
-#| out-width: ".40\\linewidth"
-#| fig-show: "hold"
-#| layout-ncol: 2
+newdata <- expand.grid(
+  ratio_prop = seq(0.15, .85, .001), 
+  type = c("Separated", "Adjacent"), 
+  plot = unique(res3$plot), 
+  participant = 1)
+pred2 <- predict(gam_mod2, newdata = newdata, type = "terms", se.fit = T) %>% as.data.frame() 
 
-r = residuals(gam_mod)
-p = predict(gam_mod)
+pred_se2 <- select(pred2, matches("se.fit")) %>%
+  select(-matches("participant"))
+pred_fit2 <- select(pred2, matches("^fit.")) %>%
+  select(-matches("participant"))
 
-ggplot(mapping = aes(x = p, y = r)) +
+newdata %>%
+  mutate(pred = rowSums(pred_fit2) + gam_mod2$coefficients[1], 
+         se = rowSums(pred_se2) + gam_sum2$p.table[1,2]) %>%
+  ggplot(aes(x = ratio_prop, y = pred , color = type)) + 
+  geom_ribbon(aes(ymin = pred - 1.96*se, ymax = pred + 1.96*se, fill = type), alpha = .25) +  
+  geom_line() + facet_grid(.~plot) + 
+  scale_color_discrete("Comparison", na.translate = F) + scale_fill_discrete("Comparison", na.translate = F) + 
+  
+  geom_point(data = res3, aes(x = ratioLabel/100, y = estimation_error, color = type)) +
+  theme_bw() + ylab("Estimation Error") + xlab("True Proportion Difference") + 
+  xlim(c(0, 1))
+
+
+r2 = residuals(gam_mod2)
+p2 = predict(gam_mod2)
+
+ggplot(mapping = aes(x = p2, y = r2)) +
   geom_point() + 
   geom_hline(yintercept = 0, linetype = 'dashed', color = 'red') + 
   theme_bw() + 
   labs(x = 'Fitted value',
        y = 'Residual')
 
-ggplot(mapping = aes(sample = r)) + 
+ggplot(mapping = aes(sample = r2)) + 
   geom_qq() + 
   geom_qq_line(color = 'red', linetype = 'dashed') + 
   theme_bw() + 
   labs(x = 'Theoretical Quantiles',
        y = 'Sample Quantiles')
-
 ```
+
