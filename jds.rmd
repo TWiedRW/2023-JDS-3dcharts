@@ -532,7 +532,7 @@ This replicates the spirit of the recruitment method without the implicit assump
 
 A total of 48 participants completed the study; demographics are shown in \Cref{fig:demographics}.
 
-```{r demographics, fig.cap="Demographic characteristics of participants in the study.", message=FALSE, warning=FALSE, out.width='100%', fig.width = 9, fig.height = 3.5}
+```{r demographics, fig.cap="Demographic characteristics of participants in the study.", message=FALSE, warning=FALSE, out.width='100%', fig.width = 9, fig.height = 3.5, cache = F}
 library(patchwork)
 valid.users$userAppStartTime <- as.POSIXct(valid.users$userAppStartTime,
            origin = '1970-1-1')

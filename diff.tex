@@ -1,0 +1,553 @@
+\documentclass[letterpaper,inpress,dvipsnames]{jdsart}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL initialsubmission.tex   Sun Jan 21 19:15:37 2024
+%DIF ADD jds.tex                 Mon Jan 22 00:30:32 2024
+
+\setcounter{page}{1}
+\pubmonth{July}
+\pubyear{2022}
+\volume{xx}
+\issue{xx}
+\doi{0000}
+
+
+\usepackage[utf8]{inputenc}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%DIF 15a15
+\usepackage{subfig} %DIF > 
+%DIF -------
+
+\usepackage{amsfonts,amsmath,amssymb,amsthm} 
+%DIF 17a18-19
+\usepackage{threeparttable} %DIF > 
+\usepackage{cleveref} %DIF > 
+%DIF -------
+\usepackage{booktabs} 
+\usepackage{lipsum} 
+\PassOptionsToPackage{dvipsnames}{xcolor} 
+\newcommand{\svp}[1]{{\textcolor{ForestGreen}{#1}}} 
+\newcommand{\tw}[1]{{\textcolor{Red}{#1}}}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+\begin{frontmatter}
+
+\title{Evaluating Perceptual Judgements on 3D Printed Bar Charts}
+\runtitle{Perceptual Judgements on 3D Printed Bar Charts}
+
+\author[1]{
+  \inits{T.}
+  \fnms{Tyler}
+  \snm{Wiederich}  \thanksref{1}  \ead{twiederich2@huskers.unl.edu}}
+\author[1]{
+  \inits{S.}
+  \fnms{Susan}
+  \snm{VanderPlas}  \ead{susan.vanderplas@unl.edu}}
+
+\thankstext[type=corresp,id=1]{Tyler Wiederich}
+\address[1]{Department of Statistics, 
+  \institution{University of Nebraska-Lincoln}, \cny{United States of America}}
+
+\begin{abstract}
+\DIFdelbegin \DIFdel{The use of }\DIFdelend \DIFaddbegin \DIFadd{Graphical design principles typically recommend minimizing the dimensionality of a visualization - for instance, using only 2 dimensions for bar charts rather than providing a }\DIFaddend 3D \DIFdelbegin \DIFdel{data visualizations has limitations when the third dimension does not convey any additional information to the viewer. Numerous studies advocate to avoid these types of graphs whenever possible, but these studies are almost entirely focused on the }\DIFdelend \DIFaddbegin \DIFadd{rendering, because this extra complexity may result in a decrease in accuracy. This advice has been oft repeated, but the underlying experimental evidence is focused on fixed }\DIFaddend 2D projections of \DIFdelbegin \DIFdel{the }\DIFdelend 3D \DIFdelbegin \DIFdel{graphs. This paperdescribes the partial replication of a well-known paper in data visualization and its adaptation to focus on }\DIFdelend \DIFaddbegin \DIFadd{charts. In this paper, we describe an experiment which attempts to establish whether the decrease in accuracy extends to }\DIFaddend 3D \DIFdelbegin \DIFdel{printed bar charts. While current results from our studydo not show differences between 2D and }\DIFdelend \DIFaddbegin \DIFadd{virtual renderings and 3D printed charts. We replicate the grouped bar chart comparisons in the 1984 Cleveland \& McGill study, assessing the accuracy of numerical estimates using different types of }\DIFaddend 3D \DIFdelbegin \DIFdel{graphs, we will use this study to provide a baseline for future studies dealing with graphics in 3D environments}\DIFdelend \DIFaddbegin \DIFadd{and 2D renderings}\DIFaddend .
+\end{abstract}
+
+\begin{keywords}
+\kwd{graphics}\kwd{3D bar charts}\kwd{3D printing}.
+\end{keywords}
+
+\end{frontmatter}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+\DIFdelbegin %DIFDELCMD < \hypertarget{elementary-graphical-tasks}{%
+%DIFDELCMD < \subsection{Elementary Graphical Tasks}\label{elementary-graphical-tasks}}
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{\mbox{%DIFAUXCMD
+\citet{cleveland_graphical_1984} }\hskip0pt%DIFAUXCMD
+published a paper that sets up the foundation for }\DIFdelend \DIFaddbegin \DIFadd{Good communication requires both that the information be transmitted correctly and that the intended recipient be able to decode and understand the transmitted information accurately. In order to communicate effectively, we must use graphical forms that accurately convey information relevant to the task in question. In many cases, this means we must understand }\DIFaddend how accurately people \DIFdelbegin \DIFdel{extract quantitative information using }\DIFdelend \DIFaddbegin \DIFadd{can read quantitative information off of charts. While accuracy is not the only quantity of interest in graphical investigations \mbox{%DIFAUXCMD
+\citep{hullmanPursuitErrorSurvey2019}}\hskip0pt%DIFAUXCMD
+, it is an important factor in assessing the utility of many different data graphics.
+}
+
+\DIFadd{The accuracy of graphical forms has been studied for almost a century \mbox{%DIFAUXCMD
+\citep{vonhuhnFurtherStudiesGraphic1927, eellsRelativeMeritsCircles1926, croxtonGraphicComparisonsBars1932, croxtonBarChartsCircle1927}}\hskip0pt%DIFAUXCMD
+, as new ways of representing information evolve, we must revisit old studies to determine whether these representations have the same limitations as previous versions. This is particularly true in areas like graphics which are affected by the immense technological innovation in hardware and software which has taken place since the early 1990s.
+}
+
+\hypertarget{elementary-graphical-tasks}{%
+\subsection{Elementary Graphical Tasks}\label{elementary-graphical-tasks}}
+
+\DIFadd{\mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+established the comparative accuracy of different ``}\DIFaddend elementary perceptual tasks\DIFaddbegin \DIFadd{'' }\DIFaddend (EPTs).
+Elementary Perceptual Tasks, according to these experiments, include assessing graphical elements such as position along a common scale, length, angle, and volume, and estimating the corresponding numerical value of these representations.
+\DIFdelbegin \DIFdel{They found that estimates of ratios between positions along a common scale had smaller log errors than estimates of ratios between lengths. }\DIFdelend The study relied entirely on estimation accuracy, which may not always be relevant when extracting information from graphs. For example, estimation is less relevant when ordering values by size.
+\DIFaddbegin \DIFadd{As a result of the Cleveland and McGill \mbox{%DIFAUXCMD
+\citeyearpar{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+study, it is possible to assemble an ordering of perceptual accuracy for the elements of length, position, and angle.
+}\DIFaddend \citet{heerCrowdsourcingGraphicalPerception2010b} replicated some parts of \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citet{cleveland_graphical_1984} }\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+}\DIFaddend in an online setting using Mechanical Turk, \DIFdelbegin \DIFdel{largely replicating }\DIFdelend \DIFaddbegin \DIFadd{a platform for crowdsourcing human tasks that has been used for (among other things) assembling machine learning datasets. This replication study largely validated }\DIFaddend the results of the original study while demonstrating the utility of the Mechanical Turk platform \DIFaddbegin \DIFadd{for graphical testing}\DIFaddend .
+
+\DIFdelbegin \DIFdel{Further studies have shown that }\DIFdelend \DIFaddbegin \DIFadd{The first experiment in \mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+(the position-length experiment), used five types of bar charts: two types of grouped bar charts and three types of stacked bar charts.
+Each chart had two bars marked for comparison; participants were asked to determine which bar was smaller and give the perceived ratio of the smaller bar to the larger bar. \mbox{%DIFAUXCMD
+\Cref{fig:bar-types} }\hskip0pt%DIFAUXCMD
+shows the two types of grouped bar charts.
+We are primarily interested in the grouped bar charts (in part because }\DIFaddend 3D \DIFdelbegin \DIFdel{graphs are less accurate at portraying numeric information that 2D graphs \mbox{%DIFAUXCMD
+\citep{barfield_effects_1989, fisher_data_1997}}\hskip0pt%DIFAUXCMD
+.
+In certain contexts and conditions, there is some research suggesting that 3D graphs may better encode information \mbox{%DIFAUXCMD
+\citep{brath_3d_2014}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{printing is not yet inexpensive enough to make moderate-scale stacked bar chart experiments viable), which consisted of two comparison bars which were either adjacent or in separate groups.
+These grouped bar charts will be referenced as adjacent and separated graph types in this paper, respectively}\DIFaddend .
+
+\DIFaddbegin \begin{figure}
+\includegraphics[width=.49\linewidth]{jds_files/figure-latex/bar-types-1} \includegraphics[width=.49\linewidth]{jds_files/figure-latex/bar-types-2} \caption{\DIFaddFL{\mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+used two different types of grouped bar charts: comparisons between adjacent bars, and comparisons between separated bars. It is widely acknowledged that comparisons between separated bars (Type 3 comparisons, in Cleveland \& McGill's terminology) are more difficult and error-prone.}}\label{fig:bar-types}
+\end{figure}
+
+\DIFaddend \hypertarget{d-graphical-perception}{%
+\subsection{3D Graphical Perception}\label{d-graphical-perception}}
+
+Chart perception is \DIFdelbegin \DIFdel{often }\DIFdelend affected by the \DIFaddbegin \DIFadd{human }\DIFaddend visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial\DIFdelbegin \DIFdel{and largely exist }\DIFdelend \DIFaddbegin \DIFadd{.
+In addition, these artificial stimuli are typically created and presented }\DIFaddend in two dimensions.
+\DIFdelbegin \DIFdel{This occasionally causes problems: the line-width illusion, }\DIFdelend \DIFaddbegin \DIFadd{The artificial scenes we create for data visualization have been documented to cause problems: }\DIFaddend for instance, \DIFaddbegin \DIFadd{the line-width illusion \mbox{%DIFAUXCMD
+\citep{vanderplasSignsSineIllusion2015, daySineIllusion1991, hofmannCommonAnglePlots2013} }\hskip0pt%DIFAUXCMD
+}\DIFaddend has been attributed to implicit 3D perception of \DIFdelbegin \DIFdel{two-dimensional }\DIFdelend \DIFaddbegin \DIFadd{2D }\DIFaddend stimuli and can affect perception of error bands, candlestick plots, \DIFaddbegin \DIFadd{hammock plots, }\DIFaddend and Sankey diagrams\DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citep{vanderplasSignsSineIllusion2015, daySineIllusion1991, hofmannCommonAnglePlots2013}}\hskip0pt%DIFAUXCMD
+. }\DIFdelend \DIFaddbegin \DIFadd{. The line width illusion causes lines or error bands which are actually the same length to appear shorter at points with large amounts of curvature; a simple example of the classic sine illusion (one version of the line width illusion) is shown in \mbox{%DIFAUXCMD
+\Cref{fig:sine-illusion}}\hskip0pt%DIFAUXCMD
+.
+While this illusion is problematic in two dimensions, when the depth cues are actually present in a three-dimensional situation, the same implicit visual heuristics contribute to accurate size perception (as in the middle panel of \mbox{%DIFAUXCMD
+\Cref{fig:sine-illusion}}\hskip0pt%DIFAUXCMD
+).
+Thus, there is reason to think that perceptual accuracy may be dependent on the realism of the visual display relative to the training of the visual system and the heuristics which are activated in order to make sense of the display.
+}\DIFaddend 
+
+\DIFaddbegin \begin{figure}
+\subfloat[Sine Illusion\label{fig:sine-illusion-1}]{\includegraphics[width=0.33\linewidth]{jds_files/figure-latex/sine-illusion-1} }\subfloat[3D surface with similar features\label{fig:sine-illusion-2}]{\includegraphics[width=0.33\linewidth]{jds_files/figure-latex/sine-illusion-2} }\subfloat[Perceived vs. actual length\label{fig:sine-illusion-3}]{\includegraphics[width=0.33\linewidth]{jds_files/figure-latex/sine-illusion-3} }\caption{\DIFaddFL{An illustration of the sine illusion\mbox{%DIFAUXCMD
+\citep{vanderplasSignsSineIllusion2015}}\hskip0pt%DIFAUXCMD
+, also known as the line-width illusion. All vertical lines are the same length, but the lines in the middle of the curve appear to be much shorter. The illusion results when implicit perceptual corrections useful for perceiving the size of objects with depth are applied to 2D stimuli with no actual depth. As 3D heuristics occasionally cause inaccurate communication when applied to 2D objects, it is reasonable to think that there might be some situations where charts making use of a realistic third dimension might be perceived more accurately than their 2D equivalents.}}\label{fig:sine-illusion}
+\end{figure}
+
+\DIFaddend The use of 3D graphics have been explored in multiple studies\DIFaddbegin \DIFadd{, with mixed results}\DIFaddend .
+\citet{fisher_data_1997} explored \DIFdelbegin \DIFdel{the preference of using either }\DIFdelend \DIFaddbegin \DIFadd{user preference for }\DIFaddend 2D or 3D \DIFdelbegin \DIFdel{graphs }\DIFdelend \DIFaddbegin \DIFadd{charts }\DIFaddend and found that subjects tended to \DIFdelbegin \DIFdel{use }\DIFdelend \DIFaddbegin \DIFadd{prefer }\DIFaddend simpler 2D graphs when tasked with extracting information.
+\citet{barfield_effects_1989} compared 2D and 3D graphs presented on paper and on computers\DIFdelbegin \DIFdel{.
+Their results showed }\DIFdelend \DIFaddbegin \DIFadd{, showing }\DIFaddend that the accuracy of subject answers depended on their skill level\DIFdelbegin \DIFdel{.
+Novice }\DIFdelend \DIFaddbegin \DIFadd{: novice }\DIFaddend subjects were more accurate with 2D paper graphs\DIFdelbegin \DIFdel{and }\DIFdelend \DIFaddbegin \DIFadd{, while }\DIFaddend experienced managers were more accurate with 3D computer graphs.
+For both experience levels, participants were more confident in their answers \DIFaddbegin \DIFadd{when }\DIFaddend using 2D graphs\DIFdelbegin \DIFdel{over other presentations of data}\DIFdelend .
+There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may \DIFdelbegin \DIFdel{better encode information.
+}\DIFdelend \DIFaddbegin \DIFadd{provide a more natural way to encode information, at least in theory. For instance, when X and Y are used to represent spatial dimensions, it may be preferable to use a 3D chart to convey numerical information instead of using color, which is perceived much less accurately.
+}\DIFaddend \citet{brath_3d_2014} highlights the intrinsic attributes of 3D graphs and \DIFdelbegin \DIFdel{its }\DIFdelend \DIFaddbegin \DIFadd{the }\DIFaddend benefits when used appropriately with other 3D elements such as lighting and correct portrayal of data attributes.
+\DIFaddbegin \DIFadd{Nevertheless, it is extremely common in visualization literature to recommend that 3D plots be avoided at all costs \mbox{%DIFAUXCMD
+\citep{vanderplasTestingStatisticalCharts2020, wilkeDonGo3D2020, morganwallIntroducing3DGgplots20191006}}\hskip0pt%DIFAUXCMD
+.
+}\DIFaddend 
+
+There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citep{huffHowLieStatistics1954}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
+However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since \DIFdelbegin \DIFdel{2014.
+Digital graphics has }\DIFdelend \DIFaddbegin \DIFadd{Heer's replication study \mbox{%DIFAUXCMD
+\citeyearpar{heerCrowdsourcingGraphicalPerception2010b} }\hskip0pt%DIFAUXCMD
+in 2010.}\\
+\DIFadd{Computer graphics and rendering technology have }\DIFaddend developed quickly, along with the hardware necessary to support these software developments.
+As a result, we have much more natural \DIFaddbegin \DIFadd{virtual }\DIFaddend rendering of 3D objects\DIFdelbegin \DIFdel{virtually}\DIFdelend , and we can also print graphics in three dimensions \DIFdelbegin \DIFdel{, moving the }\DIFdelend \DIFaddbegin \DIFadd{using mass-market, relatively inexpensive 3D printers, moving }\DIFaddend artificial charts into a more natural\DIFaddbegin \DIFadd{, physical }\DIFaddend setting.
+As a result, it is reasonable to reconsider the use of 3D charts, not only because of \DIFaddbegin \DIFadd{new }\DIFaddend technological developments, but \DIFdelbegin \DIFdel{because these }\DIFdelend \DIFaddbegin \DIFadd{also because 3D printed }\DIFaddend charts provide the opportunity to make \DIFdelbegin \DIFdel{visual }\DIFdelend \DIFaddbegin \DIFadd{data }\DIFaddend graphics accessible to those with limited or absent vision \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citep{fleetHowTactileGraphics2023}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
+
+\DIFdelbegin \DIFdel{Here, we provide the process of replication and modernization of testing perceptual judgments to 2D graphs, }\DIFdelend \DIFaddbegin \DIFadd{In this paper, we discuss a study designed to examine Cleveland \& McGill's experiments on grouped bar charts using modern graphics in two and three dimensions. This study lays the groundwork for additional empirical studies on the use of }\DIFaddend 3D \DIFdelbegin \DIFdel{graphs projected in 2D environments, and }\DIFdelend \DIFaddbegin \DIFadd{graphics, rendered and }\DIFaddend 3D \DIFdelbegin \DIFdel{printed bar graphs.
+}%DIFDELCMD < 
+
+%DIFDELCMD < \hypertarget{selected-components-from-cleveland-and-mcgill}{%
+%DIFDELCMD < \subsection{Selected Components from Cleveland and McGill}\label{selected-components-from-cleveland-and-mcgill}}
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Cleveland and McGillprovided a theory and tested for the ordering of perceptual importance for the elements of length, position, and angle. Their first experiment, referenced as the position-length experiment, used five types of bar charts.
+Two of these were grouped bar charts and the other three were stacked bar charts.
+Each chart had two bars used for comparison and participants were asked to determine which bar was smaller and give their perceived ratio of the smaller bar to the larger bar .
+The two grouped bar charts are for the perceptual element of position along a common scale, where one has zero distance between bars and the other has a fixed distance between bars.
+These grouped bar charts will be referenced as adjacent and separated graph types in this paper , respectively.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Our study replicates the procedure for the comparisons of the two grouped bar charts, but with an objective of detecting differences in accuracy between }\DIFdelend \DIFaddbegin \DIFadd{printed, for visualizing complex data. In order to explore perception of fully 3D graphics, it is prudent to start with the simplest possible 3D graphic: one in which the third dimension is not necessary, so that we can easily compare to two-dimensional representations without loss of information.
+In the next section we provide details about design and execution of our experiment, including the process of replicating stimuli from \mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+in order to create }\DIFaddend 2D\DIFdelbegin \DIFdel{graphs, }\DIFdelend \DIFaddbegin \DIFadd{, }\DIFaddend 3D \DIFdelbegin \DIFdel{digital graphs, }\DIFdelend \DIFaddbegin \DIFadd{projected, 3D rendered, and 3D printed bar graphs. The next section presents the results, }\DIFaddend and \DIFaddbegin \DIFadd{we conclude the paper by discussing this experiment in the context of existing work on the perception of 2D and }\DIFaddend 3D \DIFdelbegin \DIFdel{printed graphs}\DIFdelend \DIFaddbegin \DIFadd{graphical elements}\DIFaddend .
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+Our study is designed to replicate and expand upon the position-length experiment from Cleveland \DIFdelbegin \DIFdel{and }\DIFdelend \DIFaddbegin \DIFadd{\& }\DIFaddend McGill as closely as possible\DIFaddbegin \DIFadd{, with the hope of being able to integrate this study with previously reported results in a consistent manner}\DIFaddend .
+In this section, we \DIFdelbegin \DIFdel{will }\DIFdelend discuss the replication process and the design of our \DIFdelbegin \DIFdel{modified }\DIFdelend version of this experiment.
+
+\hypertarget{replicating-cleveland-and-mcgill}{%
+\subsection{Replicating Cleveland and McGill}\label{replicating-cleveland-and-mcgill}}
+
+The first step of replicating the position-length experiment was to determine the heights of the bars that participants use for comparisons.
+These values for the bar heights are linear on a log scale and are given by
+
+\[s_i=10\cdot 10^{(i-1)/12}, \qquad i=1,...,10\]
+
+Each graph presents two bars from the values given above where the participants are asked to judge the ratio of the smaller bar to the larger bar. The ratio of bars used by Cleveland and McGill were 17.8, 26.1, 38.3, 46.4 (twice), 56.2, 68.1 (twice), and 82.5 (twice).
+The exact numeric comparisons were not disclosed, but the comparison values used in our study were subjected to the constraints of having the same ratio values and that no value was used more than twice. \DIFaddbegin {\DIFadd{\textcolor{ForestGreen}{Can we show the comparison values in a table?}}}
+\DIFaddend 
+
+\DIFdelbegin \DIFdel{Each graph is presented so that there are ten bars where only two of the bars are marked for identification.
+}\DIFdelend \DIFaddbegin {\DIFadd{\textcolor{ForestGreen}{In each graph, there are two sets of five bars each, and two of the bars are marked for identification with a circle and triangle}}}\DIFadd{, }{\DIFadd{\textcolor{ForestGreen}{as in \Cref{fig:bar-types}.}}}
+\DIFaddend Cleveland and McGill did not specify the random process for the heights of the eight other bars, so we used a scaled Beta distribution with parameters that limit excessive noise around the bars used for comparisons.\DIFaddbegin {\DIFadd{\textcolor{ForestGreen}{What does excessive noise mean??}}}
+\DIFaddend Code to reproduce the data generation process, data underlying the plots used in this study, the rendered plots and STL files, anonymized user data, and analysis code can found be at \url{https://github.com/TWiedRW/2023-JDS-3dcharts}.
+
+\hypertarget{stimuli-construction}{%
+\subsection{Stimuli Construction}\label{stimuli-construction}}
+
+The graphs share a common layout across all formats, where two groupings of five bars are identified by ``A'' and ``B'', respectively, and circles and triangles are used to identify the bars participants should compare. Example graphs are shown in
+\DIFdelbegin \DIFdel{Figure \ref{fig:plotTypes}}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\Cref{fig:plotTypes}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
+There are some graphical elements that cannot be easily portrayed via 3D printing. For this reason, all graph types do not have axes, grid lines, or floating titles.
+
+\begin{figure}
+\DIFdelbeginFL %DIFDELCMD < \includegraphics[width=1\linewidth]{_images/plot-types} %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.3\linewidth]{_images/Type1-Rep01} \includegraphics[width=0.3\linewidth]{_images/RenderedChart} \includegraphics[width=0.35\linewidth]{_images/Kit_of_charts} \DIFaddendFL \caption{Two dimensional, \DIFdelbeginFL \DIFdelFL{two-dimensional }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{3D }\DIFaddendFL digital rendering, and 3D-printed charts used in this study.}\label{fig:plotTypes}
+\end{figure}
+
+The ggplot2 \citep{ggplot2} package was utilized to create the 2D bar charts.
+The scale axis was removed, leaving only the bars and a bar grouping identifier.
+The bars used for comparisons had the identifying mark at a height of 5 out of 100 for the 2D plots, and the 3D plots had the identifying marks on top of the bars.
+
+The 3D renderings and 3D printed charts were both created using OpenSCAD \citep{kintelOpenSCADDocumentation2023}, which creates STL files from markup describing the object's geometric composition.
+Charts were composed of a platform, \DIFdelbegin \DIFdel{raised labels for }\DIFdelend \DIFaddbegin \DIFadd{with raised text labels centered in front of }\DIFaddend the A and B groups of bars\DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{. Bars were created by inserting bar heights into the OpenSCAD template using R, and then raised }\DIFaddend circle and triangle markers \DIFdelbegin \DIFdel{indicating the bars of interest, and the bars themselves; values for the bar heights were inserted into the markup using R \mbox{%DIFAUXCMD
+\citep{R}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{were positioned on top of the bars to be compared to provide a tactile and visual indicator}\DIFaddend .
+In addition, an ID code was engraved into the bottom of the platform to uniquely identify each object; this \DIFdelbegin \DIFdel{allows }\DIFdelend \DIFaddbegin \DIFadd{allowed }\DIFaddend the researchers to ensure that \DIFdelbegin \DIFdel{the 3D printedcharts are correctly allocated to stimulus sets}\DIFdelend \DIFaddbegin \DIFadd{each kit contained the correct charts throughout the experiment while minimizing the risk of stickers or other identifiers becoming detached from the charts.
+As printed, the base of each chart was 13cm x 3cm x 1cm, with the highest bar rising 9.5cm above the chart base.
+Raised letters and shapes were 2mm above the base or bar, respectively.
+The color of the filament used to print each chart corresponded to the estimation ratio (though this was not obvious to participants), allowing the researchers to quickly determine that a kit of 3D charts contained no ratio duplication.
+Colors were randomly assigned to ratios so that participants could not gain information about the ratio from any perceived ordering of the colors}\DIFaddend .
+
+Digital renderings of the generated STL files were created using \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citet{rgl}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{RGL \mbox{%DIFAUXCMD
+\citep{rgl}}\hskip0pt%DIFAUXCMD
+}\DIFaddend , which integrates into \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citet{shiny} }\hskip0pt%DIFAUXCMD
+using the \mbox{%DIFAUXCMD
+\citet{mozillafoundationWebGL2D3D2023} }\hskip0pt%DIFAUXCMD
+extension.
+Rendered 3D charts were initially angled corresponding to the }\DIFdelend \DIFaddbegin \DIFadd{Shiny \mbox{%DIFAUXCMD
+\citep{shiny} }\hskip0pt%DIFAUXCMD
+using the WebGL \mbox{%DIFAUXCMD
+\citep{mozillafoundationWebGL2D3D2023} }\hskip0pt%DIFAUXCMD
+extension.
+The RGL rendering of the STL file was initially angled to correspond to the perspective of }\DIFaddend default 3D bar charts present in Microsoft Excel, but \DIFdelbegin \DIFdel{WebGL's interactivity allows the user to rotate, scale, and otherwise interact with the chart to change the angle.
+3D renderings }\DIFdelend \DIFaddbegin \DIFadd{in the WebGL interactive environment, participants could rotate the charts as they pleased to create a useful estimate of the bar ratio.
+Rendered charts }\DIFaddend were colored to correspond \DIFdelbegin \DIFdel{to the 3D printed chart filament color }\DIFdelend \DIFaddbegin \DIFadd{with the filament color used to print the physical chart for consistency}\DIFaddend .
+The default \texttt{rgl} lighting was replaced with three lights located in fixed positions around the rendered figure.
+The lights were positioned so that one was behind the rendered figure, another in front of the figure, and one light below the figure.
+\DIFdelbegin \DIFdel{3D charts were printed with colored filament corresponding to a specific ratio comparison; this allowed researchers to visually assess kits to ensure that they contained five unique ratios.
+Colors corresponding to each ratio were assigned randomly to ensure that chart color provided no useful information about the ratio value. As printed, the base of the chart was 13cm x 3cm x 1cm, with the highest bar rising 9.5cm above the chart base. Raised letters and shapes were 2mm above the base or bar, respectively. }\DIFdelend \DIFaddbegin \DIFadd{This arrangement provided a consistent visual experience and minimized shadows that prevented visual estimation of the bars.
+}\DIFaddend 
+
+\hypertarget{experiment-design}{%
+\subsection{Experiment Design}\label{experiment-design}}
+
+\DIFdelbegin \DIFdel{Participants were provided a kit with five 3D-printed charts, comprising five of the seven unique ratio comparisons; we then used the kit ID to ensure that participants saw computer-rendered charts with ratios corresponding to those in the kit of physical charts }\DIFdelend \DIFaddbegin \DIFadd{A diagram of the experimental design is provided in \mbox{%DIFAUXCMD
+\Cref{fig:studyDesign}}\hskip0pt%DIFAUXCMD
+. The study is set up as a modified randomized incomplete block design, comprised of 3 blocks (presentation mode), 7 bar ratios (5 are selected for each participant). At each combination of ratio and presentation type, the comparison type, adjacent (Type 1) or separated (Type 3), is randomly selected. This process was used to create 21 kits of 5 3D printed charts and 10 virtual charts. There is thus a slight deviation from a completely randomized incomplete block design, in that all possible combinations of ratios, presentation modes, and comparison types are not present in our design. However, this approach provided the best experimental design given the constraints of managing physical stimuli; it took nearly a month of continuous 3D printing to create all of the charts for the kits that we assembled. A dataset containing the kit composition breakdown is available in the github repository for this project}\DIFaddend .
+\DIFdelbegin \DIFdel{This ensured that the experimental design was balanced across chart type and randomized with respect to the type of comparison (adjacent or separated).
+We printed 21 kits containing five 3d-printed charts each.
+}\DIFdelend 
+
+\begin{figure}
+\DIFdelbeginFL %DIFDELCMD < \includegraphics[width=6.4in]{_images/study-design} %%%
+\DIFdelendFL \DIFaddbeginFL \centering
+\includegraphics{_images/design.pdf}
+\DIFaddendFL \caption{\DIFaddbeginFL \label{fig:studyDesign}\DIFaddendFL A graphical representation of the study design. Only five of the seven ratios were used in each kit\DIFdelbeginFL \DIFdelFL{where }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{; at least one of }\DIFaddendFL the \DIFaddbeginFL \DIFaddFL{smallest or largest }\DIFaddendFL ratios \DIFdelbeginFL \DIFdelFL{are randomly }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{were included along with 4 other charts; each }\DIFaddendFL selected \DIFaddbeginFL \DIFaddFL{ratio was displayed in all 3 mediums}\DIFaddendFL . \DIFaddbeginFL \DIFaddFL{For each medium \(\times\) ratio combination, the comparison type (separated or adjacent) was randomly determined. }\DIFaddendFL A total of 21 kits \DIFaddbeginFL \DIFaddFL{of 3D printed charts }\DIFaddendFL were created to include all combinations of the five ratios.}
+\DIFdelbeginFL %DIFDELCMD < \label{fig:studyDesign}
+%DIFDELCMD < %%%
+\DIFdelendFL \end{figure}
+
+\hypertarget{participant-recruitment}{%
+\subsection{Participant Recruitment}\label{participant-recruitment}}
+
+One interesting facet of \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citet{cleveland_graphical_1984} }\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+}\DIFaddend is the participant recruitment methodology: ``For each experiment the subjects fell into two categories: (1) a group of females, mostly housewives, without substantial technical experience; (2) a mixture of males and females with substantial technical training and working in technical jobs.
+Most of the subjects in the position-length experiment participated in the position-angle experiment; in all cases repeat subjects judged the position-angle graphs first.''
+It \DIFdelbegin \DIFdel{would seem }\DIFdelend \DIFaddbegin \DIFadd{seems }\DIFaddend likely that the authors recruited individuals within their respective departments as well as their wives.
+In \DIFdelbegin \DIFdel{the spirit of replicating the study}\DIFdelend \DIFaddbegin \DIFadd{order to replicate this atypical participant recruitment method in the modern era}\DIFaddend , members of the UNL Statistics department and their spouses, partners, and roommates were asked to participate in our study\DIFdelbegin \DIFdel{; this }\DIFdelend \DIFaddbegin \DIFadd{.
+This }\DIFaddend replicates the spirit of the \DIFdelbegin \DIFdel{original study }\DIFdelend \DIFaddbegin \DIFadd{recruitment method }\DIFaddend without the implicit assumptions that graduate students and professors are \DIFdelbegin \DIFdel{(1) largely male, (2) }\DIFdelend \DIFaddbegin \DIFadd{male, }\DIFaddend heterosexual, and \DIFdelbegin \DIFdel{(3) have unemployed partners}\DIFdelend \DIFaddbegin \DIFadd{have unemployed spouses}\DIFaddend .
+
+A total of 48 participants completed the study; demographics are shown in \DIFdelbegin \DIFdel{\ref{fig:demographics}}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\Cref{fig:demographics}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
+
+\begin{figure}
+\DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.85\linewidth]{jds_files/figure-latex/demographics-1} %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=1\linewidth]{jds_files/figure-latex/demographics-1} \DIFaddendFL \caption{Demographic \DIFdelbeginFL \DIFdelFL{breakdown }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{characteristics }\DIFaddendFL of participants in the study.\DIFdelbeginFL \DIFdelFL{All subjects were recruited from faculty and students in the statistics department at University of Nebraska-Lincoln.}\DIFdelendFL }\label{fig:demographics}
+\end{figure}
+
+\DIFaddbegin \DIFadd{While the results of any sample with recruitment methodology like this are not generalizable to the public, running our initial study on a comparable population to that of the initial study serves a purpose: other replications, such as \mbox{%DIFAUXCMD
+\citet{heerCrowdsourcingGraphicalPerception2010b}}\hskip0pt%DIFAUXCMD
+, used online samples of paid participants, who likely have less experience using charts and graphics and making numerical estimations than those in a statistics department (and individuals who cohabitate with them). We have every intention of running this experiment in other populations, but the convenience of online sampling is not compatible with physical objects such as our 3D printed charts, so we will have to recruit in-person participants. Thus, an initial study in a population comparable to \mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+is a reasonable first step into testing 3D charts.
+}
+
+\DIFaddend \hypertarget{data-collection}{%
+\subsection{Data Collection}\label{data-collection}}
+
+A Shiny applet was used for data collection, along with the provided kit of 3D printed charts.
+Participants provided informed consent through the applet, and then were asked for demographic information (age, gender, education level).
+Then, participants were shown a ``practice'' page which allowed them to experiment with the data collection interface and practice estimating the ratio between the bars, as shown in \DIFdelbegin \DIFdel{Figure \ref{fig:practice}
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\Cref{fig:practice}}\hskip0pt%DIFAUXCMD
+. This practice interface did not provide any feedback as to participant correctness, but was merely intended to familiarize the participants with the questions which would be asked as well as the process of estimating the ratio between the two bars.
+}\DIFaddend 
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{_images/03-Practice-2} \caption{Screenshot of Shiny application practice screen. Three 2D bar charts with different ratios were provided, along with sliders indicating the correct proportion. Participants could practice with the sliders and preview the questions that would be asked as part of the task.}\label{fig:practice}
+\end{figure}
+
+\DIFdelbegin \DIFdel{Directly before the experiment started}\DIFdelend \DIFaddbegin \DIFadd{After the practice screen}\DIFaddend , participants were asked to provide the kit ID\DIFdelbegin \DIFdel{, along with directions indicating that if the instructions indicatedthat participants should use }\DIFdelend \DIFaddbegin \DIFadd{. Participants were also instructed that when indicated, they should choose }\DIFaddend a 3D chart \DIFdelbegin \DIFdel{for a task, the participant should select a chart }\DIFdelend from the kit \DIFdelbegin \DIFdel{, enter }\DIFdelend \DIFaddbegin \DIFadd{and select }\DIFaddend the ID code of \DIFdelbegin \DIFdel{that chart from the bottomof the object, and complete the requested }\DIFdelend \DIFaddbegin \DIFadd{the chart (inscribed on the bottom) from the drop-down menu before completing the estimation }\DIFaddend task.
+Participants were also instructed to make quick \DIFdelbegin \DIFdel{judgments }\DIFdelend \DIFaddbegin \DIFadd{judgements }\DIFaddend for each graph and not to measure or estimate ratios using physical objects.
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{_images/05-Experiment-05-filled-in} \caption{Screenshot of the applet collecting data for a 3D rendered chart task. Participants were asked to select which bar (circle or triangle) was smaller, and then to estimate the ratio of the smaller bar to the larger bar.}\label{fig:experiment3dRender}
+\end{figure}
+
+Each graph (or prompt, in the case of 3D printed charts) in the applet had two corresponding questions for participants to answer: first, participants were to identify the smaller bar by shape, and then, participants were to estimate the ratio of the size of the smaller bar to the size of the larger bar, as shown in \DIFdelbegin \DIFdel{Figure \ref{fig:experiment3dRender}.
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\Cref{fig:experiment3dRender}}\hskip0pt%DIFAUXCMD
+.
+It should be noted that we chose to use a slider for entering ratio estimates - in part, this was intended to alleviate rounding effects which occur when participants enter numbers on their own or get numeric feedback from slider entries \mbox{%DIFAUXCMD
+\citep{ruudUncertaintyCausesRounding2014a, maineriSliderBarsMultiDevice2021}}\hskip0pt%DIFAUXCMD
+.
+Another benefit of this modification is that it should reduce participants' cognitive load, allowing them to focus on the ratio between bars rather than the numerical translation process.
+This differs from \mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984}}\hskip0pt%DIFAUXCMD
+, but maintains the spirit of the study while using methods which were not available for data entry at the time.
+}\DIFaddend 
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+All responses \DIFaddbegin \DIFadd{(\(n = 32\)) }\DIFaddend that incorrectly identified the smaller bar were removed from the study before analysis\DIFaddbegin \DIFadd{; this serves as a basic attention check}\DIFaddend .
+
+\hypertarget{midmeans-of-log-absolute-errors}{%
+\subsection{Midmeans of Log Absolute Errors}\label{midmeans-of-log-absolute-errors}}
+
+\DIFdelbegin \DIFdel{Cleveland and McGill }\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citeauthor{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+}\DIFaddend used
+\[\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)\]
+to measure accuracy of their participant's responses.
+In their study, log base 2 seemed appropriate due to ``average relative errors changing by factors less than 10.''
+They also added 1/8 to prevent distortions when the errors were close to zero.
+\citet{heerCrowdsourcingGraphicalPerception2010b} followed the same analysis method, replicating many (but not all) of the results presented in the original paper.
+
+\DIFdelbegin \DIFdel{Figure \ref{fig:midmeans-log-errors} }\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\Cref{fig:midmeans-log-errors} }\hskip0pt%DIFAUXCMD
+}\DIFaddend shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type.
+The results \DIFdelbegin \DIFdel{tend to indicate }\DIFdelend \DIFaddbegin \DIFadd{suggest }\DIFaddend that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. \DIFaddbegin \DIFadd{In addition, there is a tendency
+}\DIFaddend 
+
+\begin{figure}
+\DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.8\linewidth]{jds_files/figure-latex/midmeans-log-errors-1} %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\textwidth]{jds_files/figure-latex/midmeans-log-errors-1} \DIFaddendFL \caption{Midmeans \DIFaddbeginFL \DIFaddFL{and observed values }\DIFaddendFL of log absolute errors for the true ratio of bars. \DIFdelbeginFL \DIFdelFL{Each overlaying line }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Summary lines }\DIFaddendFL are computed \DIFdelbeginFL \DIFdelFL{with }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{from raw data using a }\DIFaddendFL loess \DIFaddbeginFL \DIFaddFL{smooth}\DIFaddendFL .}\label{fig:midmeans-log-errors}
+\end{figure}
+
+This is somewhat different than the results in \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citet{cleveland_graphical_1984} }\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+}\DIFaddend and \citet{heerCrowdsourcingGraphicalPerception2010b}; in both cases the midmean log absolute errors increased until about 55\% of the true proportional difference and then decreased.
+It is possible that this difference is due to the fact that we did not require an explicit numerical estimate of the ratio but instead asked participants to indicate the ratio on a slider (which is essentially a number line).
+\DIFdelbegin \DIFdel{This should reduce the cognitive load required to transition from spatial comparison to numerical comparison and then to compute the proportion, but may also have impacted the results}\DIFdelend \DIFaddbegin \DIFadd{It is possible that this change explains the lack of a difference between chart modalities we see, but there are other potential explanations as well.
+One interesting facet of this data is that there is a consistent reduction in log error when the true proportional difference is near 50\%.
+This may be because of implicit anchoring - we can typically bisect a span relatively accurately, which means that it might be expected that when the true proportion is near 50\%, we would both notice that and be able to accurately transfer that information to the slider.
+This pattern is more noticable in separated (Type 3) comparisons, which also makes sense - as these comparisons are known to be less accurate, a locally minimal error near 50\% with increased error relative to adjacent (Type 1) comparisons could easily explain the exaggerated trends we see in \mbox{%DIFAUXCMD
+\Cref{fig:midmeans-log-errors}}\hskip0pt%DIFAUXCMD
+}\DIFaddend .
+
+\DIFdelbegin %DIFDELCMD < \hypertarget{linear-mixed-effects-model}{%
+%DIFDELCMD < \subsection{Linear Mixed Effects Model}\label{linear-mixed-effects-model}}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \hypertarget{generalized-additive-model}{%
+\subsection{Generalized Additive Model}\label{generalized-additive-model}}
+\DIFaddend 
+
+In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a \DIFdelbegin \DIFdel{linear mixed effects }\DIFdelend \DIFaddbegin \DIFadd{generalized additive }\DIFaddend model that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. \DIFdelbegin \DIFdel{This allows us to test for significant differences (though given the midmean log absolute error plots, we do not expect to find any) as well as to quantify effect sizes for future studies. }\DIFdelend The formal statistical model is as follows:
+
+\[y_{ijklm}= \DIFdelbegin \DIFdel{\mu+S_i+}\DIFdelend \DIFaddbegin \DIFadd{s(}\DIFaddend R_j \DIFaddbegin \DIFadd{* T_l) }\DIFaddend + \DIFdelbegin \DIFdel{G}\DIFdelend \DIFaddbegin \DIFadd{s}\DIFaddend (R\DIFaddbegin \DIFadd{_j *G_k}\DIFaddend ) \DIFdelbegin \DIFdel{_{(k)j}}\DIFdelend + T_l + \DIFaddbegin \DIFadd{G_k + s(S_i) + }\DIFaddend \epsilon_{ijklm}\]
+
+\noindent where
+
+\begin{itemize}
+\item
+  \(y_{ijklm}=\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)\)
+\item
+  \DIFdelbegin \DIFdel{\(S_i\sim N(0,\sigma^2_S)\) is the }\DIFdelend \DIFaddbegin \DIFadd{\(s(S_i)\) is the random }\DIFaddend effect of the \(i^{th}\) subject
+\item
+  \DIFdelbegin \DIFdel{\(R_j\) }\DIFdelend \DIFaddbegin \DIFadd{\(s(R_j*T_l)\) }\DIFaddend is the effect of the \(j^{th}\) ratio\DIFaddbegin \DIFadd{, by comparison type
+}\DIFaddend \item
+  \DIFdelbegin \DIFdel{\(G(R)_{(k)j}\) }\DIFdelend \DIFaddbegin \DIFadd{\(s(R_j*G_k)\) }\DIFaddend is the effect of the \DIFdelbegin \DIFdel{\(k^{th}\) graph type nested in the }\DIFdelend \(j^{th}\) ratio\DIFaddbegin \DIFadd{, by display type
+}\DIFaddend \item
+  \(T_l\) is the effect of the \(l^{th}\) comparison type
+\item
+  \DIFaddbegin \DIFadd{\(G_k\) is the effect of the \(k^{th}\) display type
+}\item
+  \DIFaddend \(\epsilon_{ijklm}\sim N(0,\sigma^2_\epsilon)\) is the random error
+\end{itemize}
+
+\DIFdelbegin \DIFdel{No differences were detected for the true ratio of bars (p-value = .7881) }\DIFdelend \DIFaddbegin \DIFadd{A generalized additive model with random effects for subject was fit using the }\texttt{\DIFadd{mgcv}} \DIFadd{package \mbox{%DIFAUXCMD
+\citep{mgcv1, mgcv2, mgcv3}}\hskip0pt%DIFAUXCMD
+. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \mbox{%DIFAUXCMD
+\Cref{fig:midmeans-log-errors}}\hskip0pt%DIFAUXCMD
+; cumulative predictions for fixed effects are shown in \mbox{%DIFAUXCMD
+\Cref{fig:gam-pred-chart}}\hskip0pt%DIFAUXCMD
+. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0}\DIFaddend , \DIFdelbegin \DIFdel{whether the bars were adjacent or separated (p-value = .3375)}\DIFdelend \DIFaddbegin \DIFadd{.5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in \mbox{%DIFAUXCMD
+\citet{hollandsBiasProportionJudgments2000}}\hskip0pt%DIFAUXCMD
+.
+}
+
+\DIFadd{While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only 42 trials (8.79\%) had slider values at exactly 0.5, and all but 6 were for ratios on either side of 0.5 (.464}\DIFaddend , \DIFdelbegin \DIFdel{or for the plot nested within the true ratio (}\DIFdelend \DIFaddbegin \DIFadd{.562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth.
+}
+
+\begin{table}
+
+\caption{\label{tab:gam-param}\DIFaddFL{Parametric coefficients in gam model.}}
+\centering
+\begin{tabular}[t]{lrrrr}
+\toprule
+  & \DIFaddFL{Estimate }& \DIFaddFL{Std. Error }& \DIFaddFL{t value }& \DIFaddFL{Pr(>|t|)}\\
+\midrule
+\DIFaddFL{(Intercept) }& \DIFaddFL{2.6862 }& \DIFaddFL{0.1780 }& \DIFaddFL{15.0931 }& \DIFaddFL{0.0000}\\
+\DIFaddFL{plot3dDigital }& \DIFaddFL{0.1357 }& \DIFaddFL{0.1409 }& \DIFaddFL{0.9626 }& \DIFaddFL{0.3363}\\
+\DIFaddFL{plot3dPrint }& \DIFaddFL{-0.0563 }& \DIFaddFL{0.1415 }& \DIFaddFL{-0.3980 }& \DIFaddFL{0.6908}\\
+\DIFaddFL{typeAdjacent }& \DIFaddFL{0.0968 }& \DIFaddFL{0.1197 }& \DIFaddFL{0.8088 }& \DIFaddFL{0.4191}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{\label{tab:gam-smooth}\DIFaddFL{Approximate significance of smooth terms in gam model.}}
+\centering
+\begin{tabular}[t]{lrrrr}
+\toprule
+\DIFaddFL{Smooth }& \DIFaddFL{edf }& \DIFaddFL{Ref.df }& \DIFaddFL{F }& \DIFaddendFL p-value\DIFdelbeginFL \DIFdelFL{= .6868).
+While Heer \& Bostock }\DIFdelendFL \DIFaddbeginFL \\
+\midrule
+\DIFaddFL{s(Ratio):plot2dDigital }& \DIFaddFL{0.0005 }& \DIFaddFL{0.0009 }& \DIFaddFL{0.0000 }& \DIFaddFL{0.5000}\\
+\DIFaddFL{s(Ratio):plot3dDigital }& \DIFaddFL{1.7934 }& \DIFaddFL{2.2056 }& \DIFaddFL{1.2807 }& \DIFaddFL{0.2481}\\
+\DIFaddFL{s(Ratio):plot3dPrint }& \DIFaddFL{1.0003 }& \DIFaddFL{1.0005 }& \DIFaddFL{2.4488 }& \DIFaddFL{0.1183}\\
+\DIFaddFL{s(Ratio):typeSeparated }& \DIFaddFL{4.2371 }& \DIFaddFL{4.7338 }& \DIFaddFL{5.8074 }& \DIFaddFL{0.0001}\\
+\DIFaddFL{s(Ratio):typeAdjacent }& \DIFaddFL{1.0007 }& \DIFaddFL{1.0014 }& \DIFaddFL{3.5452 }& \DIFaddFL{0.0604}\\
+\addlinespace
+\DIFaddFL{s(participant) }& \DIFaddFL{27.0449 }& \DIFaddFL{34.0000 }& \DIFaddFL{4.7264 }& \DIFaddFL{0.0000}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{jds_files/figure-latex/gam-pred-chart-1} \caption{\DIFaddFL{Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. }}\label{fig:gam-pred-chart}
+\end{figure}
+
+\DIFadd{While \mbox{%DIFAUXCMD
+\citeauthor{heerCrowdsourcingGraphicalPerception2010b} }\hskip0pt%DIFAUXCMD
+}\DIFaddend provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data \DIFdelbegin \DIFdel{at this time.}\DIFdelend \DIFaddbegin \DIFadd{for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g.~slider vs.~numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
+}\DIFaddend 
+
+\DIFaddbegin \DIFadd{Model diagnostic plots show slight violations of normality with the error term, particularly with right-skewed residuals.
+Plots of the data for each ratio tend to suggest that some participants might have tried rounding to the ratio increments of fives and tens.
+For example, participants tended to favor estimating the ratio of 0.562 to around 0.5.
+Since linear models are reasonably robust to violations of normality, we will assume that the model reasonably fits.
+Plots of the residual diagnostics can be found under the supplemental material in \mbox{%DIFAUXCMD
+\Cref{fig:residualplots}}\hskip0pt%DIFAUXCMD
+.
+}
+
+\hypertarget{interactivity-with-3d-rendered-charts}{%
+\subsection{Interactivity with 3D Rendered Charts}\label{interactivity-with-3d-rendered-charts}}
+
+\DIFadd{When 3D rendered plots were shown, we recorded the number of user interactions (clicks, rotations) with the WebGL plot. \mbox{%DIFAUXCMD
+\Cref{fig:clicks} }\hskip0pt%DIFAUXCMD
+shows the distribution of number of clicks over all 3D rendered trials in the experiment, as well as the number of clicks relative to the accuracy measure \(\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)\). It does not appear that participants who interacted with the WebGL rendering were more accurate than their peers who did not.
+}
+
+\begin{figure}
+\includegraphics[width=.45\textwidth]{jds_files/figure-latex/clicks-1} \includegraphics[width=.45\textwidth]{jds_files/figure-latex/clicks-2} \caption{\DIFaddFL{Participant clicks on the WebGL interface (left) in order to interact with the plot. Most participants did not interact with the WebGL interface, perhaps because they did not realize that interacting was an option, but some participants utilized the interactivity heavily. (Right) Participant interactivity was not associated with increased accuracy.}}\label{fig:clicks}
+\end{figure}
+
+\DIFaddend \hypertarget{discussion-and-future-work}{%
+\section{Discussion and Future Work}\label{discussion-and-future-work}}
+
+Previous work in 3D graphics would suggest that the errors for the 3D graphs would be larger than the errors for the 2D graphs.
+While we did not find any significant results indicating that 3D graphs are read less accurately, there are two possibilities that might account for this discrepancy.
+
+The first potential explanation is that this study is underpowered - the effect size is small, and our 48 participants were insufficient; the original study included 51 participants, which is slightly larger. However, we should note that the analysis methods used in \citet{heerCrowdsourcingGraphicalPerception2010b} and \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citet{cleveland_graphical_1984} }\hskip0pt%DIFAUXCMD
+do not include significancetesting beyond the graphical display of }\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citet{clevelandGraphical1984} }\hskip0pt%DIFAUXCMD
+do not provide numerical tests of statistical significance, instead defaulting to graphical displays which include }\DIFaddend confidence intervals.
+
+The second possibility is more interesting: we examined 3D charts using rendered 3D graphs and 3D printed charts; both of these options allow for participants to interact with the chart, rotating it, and generally perceiving it as one might perceive any other 3D, real, object.
+This is a far cry from the 3D perspective charts in the original study, which have a fixed angle and perspective and are thus not equivalent to our 3D charts.
+Future studies should include an additional fixed 3D perspective bar chart, which will at least enable us to examine whether modern 3D rendering environments allow for more accurate conclusions than fixed 3D perspectives. Future iterations of this study will include ``traditional'' 3D graphs created by Microsoft Excel (that is, graphs with a fixed 3D perspective rendered in 2D). This option will allow us to examine fixed perspective 3D plots compared to 3D renderings and 2D plots; it will also enable online data collection in addition to the in-person data collection used in this experiment.
+
+Another interesting aspect of our study is that the method used to record participant estimates is different from the method used in the original study as well as Heer \& Bostock's replication study.
+A method similar to our slider input, marking position on a line, was used in \citet{spenceVisualPsychophysicsSimple1990}, but Spence asked participants to estimate \(A/(A+B)\), where we asked participants to estimate \(A/B\); thus, our results are still not directly comparable to previous studies.
+We expect that the specific ratio estimated would also have an effect on observed participant errors.
+
+The slider method for input of ratio estimates should be easier for participants, as it does not require explicit transformation to the numerical domain.
+What is clear is that it would be beneficial to assess the impact of \DIFaddbegin \DIFadd{the }\DIFaddend measurement method on participant errors directly, so that the results of these different studies might be explained and interpreted with regard both to the stimuli used and the measurement method employed in the experiment.
+Future iterations of this experiment will likely address this estimation difference; such modifications in experimental design are relatively straightforward in Shiny and will provide useful insight into the design of future experiments evaluating the perception of statistical graphics.
+
+\hypertarget{supplemental-material}{%
+\subsection{Supplemental Material}\label{supplemental-material}}
+
+Stimuli, code, and data for this experiment are provided at \url{https://github.com/TWiedRW/2023-JDS-3dcharts}.
+
+\bibliography{JDS2023.bib}
+\bibliographystyle{jds}
+
+
+\end{document}
