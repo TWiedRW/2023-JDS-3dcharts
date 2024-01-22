@@ -111,7 +111,7 @@ The accuracy of graphical forms has been studied for almost a century [@vonhuhnF
 Elementary Perceptual Tasks, according to these experiments, include assessing graphical elements such as position along a common scale, length, angle, and volume, and estimating the corresponding numerical value of these representations.
 The study relied entirely on estimation accuracy, which may not always be relevant when extracting information from graphs. For example, estimation is less relevant when ordering values by size.
 As a result of the Cleveland and McGill [-@clevelandGraphical1984] study, it is possible to assemble an ordering of perceptual accuracy for the elements of length, position, and angle. 
-@heerCrowdsourcingGraphicalPerception2010b replicated some parts of @clevelandGraphical1984 in an online setting using Mechanical Turk, largely validating the results of the original study while demonstrating the utility of the Mechanical Turk platform for graphical testing.
+@heerCrowdsourcingGraphicalPerception2010b replicated some parts of @clevelandGraphical1984 in an online setting using  Mechanical Turk, a platform for crowdsourcing human tasks that has been used for (among other things) assembling machine learning datasets. This replication study largely validated the results of the original study while demonstrating the utility of the Mechanical Turk platform for graphical testing.
 
 The first experiment in @clevelandGraphical1984 (the position-length experiment), used five types of bar charts: two types of grouped bar charts and three types of stacked bar charts.
 Each chart had two bars marked for comparison; participants were asked to determine which bar was smaller and give the  perceived ratio of the smaller bar to the larger bar. \Cref{fig:bar-types} shows the two types of grouped bar charts. 
@@ -151,9 +151,11 @@ datasets$data[[1]] %>%
 
 
 ## 3D Graphical Perception
-Chart perception is often affected by the visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial and largely exist in two dimensions.
-This occasionally causes problems: the line-width illusion[@vanderplasSignsSineIllusion2015;@daySineIllusion1991;@hofmannCommonAnglePlots2013], for instance, has been attributed to implicit 3D perception of 2D stimuli and can affect perception of error bands, candlestick plots, and Sankey diagrams (a simplified example is shown in @fig:sine-illusion). 
-While this illusion is problematic in 2D, when the depth cues are actually present in a three-dimensional situation, the same perceptual heuristics contribute to accurate size perception. Thus, there is reason to think that perceptual accuracy may be dependent on the realism of the stimuli. 
+Chart perception is affected by the human visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial. 
+In addition, these artificial stimuli are typically created and presented in two dimensions.
+The artificial scenes we create for data visualization have been documented to cause problems: for instance, the line-width illusion [@vanderplasSignsSineIllusion2015;@daySineIllusion1991;@hofmannCommonAnglePlots2013] has been attributed to implicit 3D perception of 2D stimuli and can affect perception of error bands, candlestick plots, hammock plots, and Sankey diagrams. The line width illusion causes lines or error bands which are actually the same length to appear shorter at points with large amounts of curvature; a simple example of the classic sine illusion (one version of the line width illusion) is shown in \Cref{fig:sine-illusion}. 
+While this illusion is problematic in two dimensions, when the depth cues are actually present in a three-dimensional situation, the same implicit visual heuristics contribute to accurate size perception (as in the middle panel of \Cref{fig:sine-illusion}). 
+Thus, there is reason to think that perceptual accuracy may be dependent on the realism of the visual display relative to the training of the visual system and the heuristics which are activated in order to make sense of the display. 
 
 
 ```{r sine-illusion}
@@ -434,22 +436,23 @@ ggplot(aes(x=x, y=y), data=dframe, colour=I("grey50")) +
 
 
 
-The use of 3D graphics have been explored in multiple studies. 
+The use of 3D graphics have been explored in multiple studies, with mixed results. 
 @fisher_data_1997 explored user preference for 2D or 3D charts and found that subjects tended to prefer simpler 2D graphs when tasked with extracting information. 
 @barfield_effects_1989 compared 2D and 3D graphs presented on paper and on computers, showing that the accuracy of subject answers depended on their skill level: novice subjects were more accurate with 2D paper graphs, while experienced managers were more accurate with 3D computer graphs. 
 For both experience levels, participants were more confident in their answers when using 2D graphs. 
 There are instances where 2D graphs perform better than 3D graphs, but there are times where 3D graphs may provide a more natural way to encode information, at least in theory. For instance, when X and Y are used to represent spatial dimensions, it may be preferable to use a 3D chart to convey numerical information instead of using color, which is perceived much less accurately. 
 @brath_3d_2014 highlights the intrinsic attributes of 3D graphs and the benefits when used appropriately with other 3D elements such as lighting and correct portrayal of data attributes.
+Nevertheless, it is extremely common in visualization literature to recommend that 3D plots be avoided at all costs [@vanderplasTestingStatisticalCharts2020;@wilkeDonGo3D2020;@morganwallIntroducing3DGgplots20191006]. 
 
-There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data [@vanderplasTestingStatisticalCharts2020;@wilkeDonGo3D2020;@morganwallIntroducing3DGgplots20191006]. 
+There is thus good reason to be wary of the use of three dimensions where only two are necessary to convey data [@huffHowLieStatistics1954]. 
 However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since Heer's replication study [-@heerCrowdsourcingGraphicalPerception2010b] in 2010.  
-Digital graphics have developed quickly, along with the hardware necessary to support these software developments. 
-As a result, we have much more natural rendering of 3D objects virtually, and we can also print graphics in three dimensions, moving artificial charts into a more natural, physical setting.
-As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because these charts provide the opportunity to make data graphics accessible to those with limited or absent vision [@fleetHowTactileGraphics2023].
+Computer graphics and rendering technology have developed quickly, along with the hardware necessary to support these software developments. 
+As a result, we have much more natural virtual rendering of 3D objects, and we can also print graphics in three dimensions using mass-market, relatively inexpensive 3D printers, moving artificial charts into a more natural, physical setting.
+As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because 3D printed charts provide the opportunity to make data graphics accessible to those with limited or absent vision [@fleetHowTactileGraphics2023].
 
 
 In this paper, we discuss a study designed to examine Cleveland & McGill's experiments on grouped bar charts using modern graphics in two and three dimensions. This study lays the groundwork for additional empirical studies on the use of 3D graphics, rendered and 3D printed, for visualizing complex data. In order to explore perception of fully 3D graphics, it is prudent to start with the simplest possible 3D graphic: one in which the third dimension is not necessary, so that we can easily compare to two-dimensional representations without loss of information. <!-- This is included because of a graphics paper section comment that really annoyed me -->
-In the next section we provide details about design and execution of our experiment, including the process of replicating stimuli from @clevelandGraphics1984 in order to create 2D, 3D projected, 3D rendered, and 3D printed bar graphs. The next section presents the results, and we conclude the paper by discussing this experiment in the context of existing work on the perception of 2D and 3D graphical elements. 
+In the next section we provide details about design and execution of our experiment, including the process of replicating stimuli from @clevelandGraphical1984 in order to create 2D, 3D projected, 3D rendered, and 3D printed bar graphs. The next section presents the results, and we conclude the paper by discussing this experiment in the context of existing work on the perception of 2D and 3D graphical elements. 
 
 
 # Methods
@@ -605,6 +608,12 @@ It should be noted that we chose to use a slider for entering ratio estimates - 
 Another benefit of this modification is that it should reduce participants' cognitive load, allowing them to focus on the ratio between bars rather than the numerical translation process.
 This differs from @clevelandGraphical1984, but maintains the spirit of the study while using methods which were not available for data entry at the time. 
 
+```{r, include = F}
+res %>%
+  group_by(subject, ratio) %>%
+  summarize(mean = mean(byHowMuch), sd = sd(byHowMuch))
+  
+```
 
 
 # Results
@@ -622,7 +631,7 @@ They also added 1/8 to prevent distortions when the errors were close to zero.
 \Cref{fig:midmeans-log-errors} shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type. 
 The results suggest that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. In addition, there is a tendency
 
-```{r midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='80%'}
+```{r midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='\\textwidth'}
 plot.types = c('2D', 'Rendered 3D', '3D Printed')
 names(plot.types) = c('2dDigital', '3dDigital', '3dPrint')
 
@@ -664,31 +673,33 @@ One interesting facet of this data is that there is a consistent reduction in lo
 This may be because of implicit anchoring - we can typically bisect a span relatively accurately, which means that it might be expected that when the true proportion is near 50%, we would both notice that and be able to accurately transfer that information to the slider. 
 This pattern is more noticable in separated (Type 3) comparisons, which also makes sense - as these comparisons are known to be less accurate, a locally  minimal error near 50% with increased error relative to adjacent (Type 1) comparisons could easily explain the exaggerated trends we see in \Cref{fig:midmeans-log-errors}.
 
-## Linear Mixed Effects Model
+## Generalized Additive Model
 
-In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a linear mixed effects model that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. This allows us to test for significant differences (though given the midmean log absolute error plots, we do not expect to find any) as well as to quantify effect sizes for future studies. The formal statistical model is as follows:
+In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a generalized additive model that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. The formal statistical model is as follows:
 
-$$y_{ijklm}=\mu+S_i + R_j + G_k +T_l + \epsilon_{ijklm}$$
+$$y_{ijklm}= s(R_j * T_l) + s(R_j *G_k) + T_l + G_k + s(S_i) + \epsilon_{ijklm}$$
 
 \noindent where
 
 - $y_{ijklm}=\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)$
 
-- $S_i\sim N(0,\sigma^2_S)$ is the random effect of the $i^{th}$ subject
+- $s(S_i)$ is the random effect of the $i^{th}$ subject
 
-- $R_j$ is the effect of the $j^{th}$ ratio
+- $s(R_j*T_l)$ is the effect of the $j^{th}$ ratio, by comparison type
 
-- $G_k$ is the effect of the $k^{th}$ display type
+- $s(R_j*G_k)$ is the effect of the $j^{th}$ ratio, by display type
 
 - $T_l$ is the effect of the $l^{th}$ comparison type
 
+- $G_k$ is the effect of the $k^{th}$ display type
+
 - $\epsilon_{ijklm}\sim N(0,\sigma^2_\epsilon)$ is the random error
 
-```{r, include=T}
+```{r, include=F}
 library(papaja)
 library(lme4)
 
-mod <- lmer(response ~ (1|subject) + ratio + plot + type,
+mod <- lmer(response ~ (1|subject) + ratioLabel + plot + type,
             data = res)
 modsum <- summary(mod)
 modaov <- anova(mod)
@@ -701,8 +712,73 @@ apa_table(apa_lm$table, caption = "Analysis of Fixed Effects")
 ```
 
 
-No differences were detected for the true ratio of bars ($t = `r modsum$coefficients[2,3]`$), whether the bars were adjacent or separated ($t = `r modsum$coefficients[5,3]`$), or for the plot nested within the true ratio ($F(`r modaov$npar[2]`, `r f_df`) = `r modaov[2,4]`$). 
-While \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data for comparison purposes.
+
+<!-- No differences were detected for the true ratio of bars ($t = `r modsum$coefficients[2,3]`$), whether the bars were adjacent or separated ($t = `r modsum$coefficients[5,3]`$), or for the plot nested within the true ratio ($F(`r modaov$npar[2]`, `r f_df`) = `r modaov[2,4]`$).  -->
+<!-- The form of this linear mixed effects model assumes a linear relationship between ratio and response, but we know from \Cref{fig:midmeans-log-errors} that the actual relationship appears to be nonlinear.  -->
+A generalized additive model with random effects for subject was fit using the `mgcv` package [@mgcv1;@mgcv2;@mgcv3]. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \Cref{fig:midmeans-log-errors}; cumulative predictions for fixed effects are shown in \Cref{fig:gam-pred-chart}. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in @hollandsBiasProportionJudgments2000. 
+
+While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only `r sum(res$byHowMuch == 50)` trials (`r sprintf("%.2f%%", mean(res$byHowMuch==50)*100)`) had slider values at exactly 0.5, and all but `r sum(res$byHowMuch == 50 & !res$ratioLabel %in% c(46.4, 56.2))` were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points  could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth. 
+
+```{r gam}
+library(mgcv)
+library(gratia)
+res2 <- res %>%
+  mutate(participant = factor(as.numeric(factor(subject)))) %>%
+  mutate(ratio_prop = ratioLabel/100) %>%
+  mutate(type = factor(type, levels = 1:2, labels = c("Separated", "Adjacent"))) %>%
+  mutate(plot = factor(plot)) %>%
+  mutate(plottype = interaction(plot, type))
+# res2
+
+gam_mod <- gam(response ~ s(ratio_prop, by = plot, k = 6) + s(ratio_prop, by = type, k = 6) +  plot + type + s(participant, bs = "re"),
+               data = res2, method = 'REML')
+# gam_mod
+
+gam_sum <- summary(gam_mod)
+```
+
+```{r, results = 'asis'}
+gam_sum$p.table %>% knitr::kable(digits = 4, caption = "Parametric coefficients in gam model.", label = "gam-param", booktabs = T)
+
+gam_sum$s.table %>% as.data.frame() %>% 
+  mutate(Smooth = rownames(.),
+         Smooth = str_replace(Smooth, "ratio_prop", "Ratio")) %>%
+  select(Smooth, everything()) %>%
+  knitr::kable(digits = 4, row.names = F, caption = "Approximate significance of smooth terms in gam model.", label = "gam-smooth", booktabs = T)
+```
+
+
+```{r gam-pred-chart, fig.cap = "Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. ", fig.width = 7, fig.height = 3, out.width = "\\textwidth"}
+# 
+# coef(gam_mod)
+# draw(gam_mod, ncol = 4)
+
+
+newdata <- expand.grid(ratio_prop = seq(0.15, .85, .001), type = c("Separated", "Adjacent"), plot = unique(res2$plot), participant = 1) %>%
+  mutate(plottype = interaction(plot, type))
+pred <- predict(gam_mod, newdata = newdata, type = "terms", se.fit = T) %>% as.data.frame() 
+
+pred_se <- select(pred, matches("se.fit")) %>%
+  select(-matches("participant"))
+pred_fit <- select(pred, matches("^fit.")) %>%
+  select(-matches("participant"))
+
+newdata %>%
+  mutate(pred = rowSums(pred_fit), 
+         se = rowSums(pred_se)) %>%
+  ggplot(aes(x = ratio_prop, y = pred + gam_mod$coefficients[1], color = type)) + 
+  geom_ribbon(aes(ymin = pred + gam_mod$coefficients[1] - 1.96*se, ymax = pred+ gam_mod$coefficients[1] + 1.96*se, fill = type), alpha = .25) +  
+  geom_line() + facet_grid(.~plot) + 
+  scale_color_discrete("Comparison", na.translate = F) + scale_fill_discrete("Comparison", na.translate = F) + 
+  
+  geom_point(data = res, aes(x = ratioLabel/100, y = response, color = factor(type, levels = 1:2, labels = c("Separated", "Adjacent")))) +
+  theme_bw() + ylab("Prediction") + xlab("True Proportion Difference") + 
+  xlim(c(0, 1))
+
+```
+
+
+While \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, the link is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g. slider vs. numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques.
 
 ## Interactivity with 3D Rendered Charts
 
