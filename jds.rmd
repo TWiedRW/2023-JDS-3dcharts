@@ -91,12 +91,18 @@ res_all = results %>%
   mutate(response = log2(abs(byHowMuch - Height*100) + 1/8),
          subject = paste0(nickname, participantUnique),
          ratioLabel = round(100*Height, 1)) %>% 
-  filter(subject %in% valid.users$subject) %>% 
+  filter(subject %in% valid.users$subject
+         , as.Date.POSIXct(appStartTime) <= '2023-05-22'
+         ) %>% 
   arrange(appStartTime)
 
+valid.users <- valid.users %>% 
+  filter(subject %in% res_all$subject)
+
 res <- res_all %>% 
-  filter(whichIsSmaller == 'Triangle (▲)',
-         as.Date.POSIXct(appStartTime) <= '2023-05-22') %>% 
+  filter(whichIsSmaller == 'Triangle (▲)'
+         , as.Date.POSIXct(appStartTime) <= '2023-05-22'
+         ) %>% 
   #Only verified results from before the start of SDSS 
   filter(!is.na(ratio))
 
@@ -105,7 +111,7 @@ res <- res_all %>%
 # Introduction
 Good communication requires both that the information be transmitted correctly and that the intended recipient be able to decode and understand the transmitted information accurately. In order to communicate effectively, we must use graphical forms that accurately convey information relevant to the task in question. In many cases, this means we must understand how accurately people can read quantitative information off of charts. While accuracy is not the only quantity of interest in graphical investigations [@hullmanPursuitErrorSurvey2019], it is an important factor in assessing the utility of many different data graphics.
 
-The accuracy of graphical forms has been studied for almost a century [@vonhuhnFurtherStudiesGraphic1927;@eellsRelativeMeritsCircles1926;@croxtonGraphicComparisonsBars1932;@croxtonBarChartsCircle1927], as new ways of representing information evolve, we must revisit old studies to determine whether these representations have the same limitations as previous versions. This is particularly true in areas like graphics which are affected by the immense technological innovation in hardware and software which has taken place since the early 1990s.
+The accuracy of graphical forms has been studied for almost a century [@vonhuhnFurtherStudiesGraphic1927;@eellsRelativeMeritsCircles1926;@croxtonGraphicComparisonsBars1932;@croxtonBarChartsCircle1927]; as new ways of representing information evolve, we must revisit old studies to determine whether these representations have the same limitations as previous versions. This is particularly true in areas like graphics which are affected by the immense technological innovation in hardware and software which has taken place since the early 1990s.
 
 ## Elementary Graphical Tasks
 @clevelandGraphical1984 established the comparative accuracy of different "elementary perceptual tasks" (EPTs).
@@ -451,7 +457,7 @@ There is thus good reason to be wary of the use of three dimensions where only t
 However, the situation is different now than it was in 1984 when Cleveland \& McGill published their seminal work; it has even changed since Heer's replication study [-@heerCrowdsourcingGraphicalPerception2010b] in 2010.  
 Computer graphics and rendering technology have developed quickly, along with the hardware necessary to support these software developments. 
 As a result, we have much more natural virtual rendering of 3D objects, and we can also print graphics in three dimensions using mass-market, relatively inexpensive 3D printers, moving artificial charts into a more natural, physical setting.
-As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because 3D printed charts provide the opportunity to make data graphics accessible to those with limited or absent vision [@fleetHowTactileGraphics2023].
+As a result, it is reasonable to reconsider the use of 3D charts, not only because of new technological developments, but also because 3D printed charts could eventually provide the opportunity to make data graphics accessible to those with limited or absent vision [@fleetHowTactileGraphics2023].
 
 
 In this paper, we discuss a study designed to examine Cleveland & McGill's experiments on grouped bar charts using modern graphics in two and three dimensions. This study lays the groundwork for additional empirical studies on the use of 3D graphics, rendered and 3D printed, for visualizing complex data. In order to explore perception of fully 3D graphics, it is prudent to start with the simplest possible 3D graphic: one in which the third dimension is not necessary, so that we can easily compare to two-dimensional representations without loss of information. <!-- This is included because of a graphics paper section comment that really annoyed me -->
@@ -546,7 +552,7 @@ This arrangement provided a consistent visual experience and minimized shadows t
 
 ## Experiment Design
 
-A diagram of the experimental design is provided in \Cref{fig:studyDesign}. The study is set up as a modified randomized incomplete block design, comprised of 3 blocks (presentation mode), 7 bar ratios (5 are selected for each participant). At each combination of ratio and presentation type, the comparison type, adjacent (Type 1) or separated (Type 3), is randomly selected. This process was used to create 21 kits of 5 3D printed charts and 10 virtual charts. There is thus a slight deviation from a completely randomized incomplete block design, in that all possible combinations of ratios, presentation modes, and comparison types are not present in our design. However, this approach provided the best experimental design given the constraints of managing physical stimuli; it took nearly a month of continuous 3D printing to create all of the charts for the kits that we assembled. A dataset containing the kit composition breakdown is available in the github repository for this project.
+A diagram of the experimental design is provided in \Cref{fig:studyDesign}. The study is set up as a modified randomized incomplete block design, comprised of 3 blocks (presentation mode) and 7 bar ratios (5 are selected for each participant). At each combination of ratio and presentation type, the comparison type, adjacent (Type 1) or separated (Type 3), is randomly selected. This process was used to create 21 kits of 5 3D printed charts and 10 virtual charts. There is thus a slight deviation from a completely randomized incomplete block design, in that all possible combinations of ratios, presentation modes, and comparison types are not present in our design. However, this approach provided the best experimental design given the constraints of managing physical stimuli; it took nearly a month of continuous 3D printing to create all of the charts for the kits that we assembled. A dataset containing the kit composition breakdown is available in the github repository for this project.
 
 <!-- There are 21 kits in total so that each combination of ratios is accounted for. -->
 <!-- Each graph is randomly assigned either an adjacent or separated comparison. -->
@@ -564,7 +570,11 @@ It seems likely that the authors recruited individuals within their respective d
 In order to replicate this atypical participant recruitment method in the modern era, members of the UNL Statistics department and their spouses, partners, and roommates were asked to participate in our study. 
 This replicates the spirit of the recruitment method without the implicit assumptions that graduate students and professors are male, heterosexual, and have unemployed spouses.
 
-A total of 48 participants completed the study; demographics are shown in \Cref{fig:demographics}.
+A total of `r nrow(valid.users)` participants completed the study; demographics are shown in \Cref{fig:demographics}.
+The participants provided a total of `nrow(res_all)` responses.
+
+
+
 
 ```{r demographics, fig.cap="Demographic characteristics of participants in the study.", message=FALSE, warning=FALSE, out.width='100%', fig.width = 9, fig.height = 3.5, cache = F}
 library(patchwork)
@@ -638,7 +648,7 @@ knitr::include_graphics("_images/05-Experiment-05-filled-in.png")
 ```
 
 Each graph (or prompt, in the case of 3D printed charts) in the applet had two corresponding questions for participants to answer: first, participants were to identify the smaller bar by shape, and then, participants were to estimate the ratio of the size of the smaller bar to the size of the larger bar, as shown in \Cref{fig:experiment3dRender}. 
-It should be noted that we chose to use a slider for entering ratio estimates - in part, this was intended to alleviate rounding effects which occur when participants enter numbers on their own or get numeric feedback from slider entries [@ruudUncertaintyCausesRounding2014a;@maineriSliderBarsMultiDevice2021]. 
+It should be noted that we chose to use a slider without numeric identifiers or tick marks for entering ratio estimates - in part, this was intended to alleviate rounding effects which occur when participants enter numbers on their own or get numeric feedback from slider entries [@ruudUncertaintyCausesRounding2014a;@maineriSliderBarsMultiDevice2021]. 
 Another benefit of this modification is that it should reduce participants' cognitive load, allowing them to focus on the ratio between bars rather than the numerical translation process.
 This differs from @clevelandGraphical1984, but maintains the spirit of the study while using methods which were not available for data entry at the time. 
 
@@ -652,7 +662,7 @@ res %>%
 
 # Results
 
-All responses ($n = `r nrow(res_all) - nrow(res)`$) that incorrectly identified the smaller bar were removed from the study before analysis; this serves as a basic attention check. In addition, one trial was removed because the participant did not enter a valid ID for a 3D printed chart.
+All responses that incorrectly identified the smaller bar ($n = `r nrow(res_all) - nrow(res)`$) were removed from the study before analysis; this serves as a basic attention check and leaves `r nrow(res)` valid responses. In addition, one response was removed because the participant did not enter a valid ID for a 3D printed chart.
 
 ## Midmeans of Log Absolute Errors
 \citeauthor{clevelandGraphical1984} used 
@@ -776,7 +786,7 @@ gam_sum$s.table %>% as.data.frame() %>%
 ```
 
 A generalized additive model with random effects for subject was fit using the `mgcv` package [@mgcv1;@mgcv2;@mgcv3]. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from \Cref{fig:midmeans-log-errors}; cumulative predictions for fixed effects are shown in \Cref{fig:gam-pred-chart}. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in @hollandsBiasProportionJudgments2000. 
-Residuals from the model indicate that there is some left skew in the tails, but this is not extreme; code for this analysis can be found in the supplemental materials on github.
+Residuals from the model indicate that there is some left skew in the tails, but this is not extreme; code for this analysis can be found in the supplemental materials on GitHub.
 
 ```{r gam-pred-chart, fig.cap = "Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. ", fig.width = 7, fig.height = 3, out.width = "\\textwidth"}
 # 
@@ -840,7 +850,7 @@ ggplot(res2, aes(sample = resid)) +
 
 ```
 
-While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only `r sum(res$byHowMuch == 50)` trials (`r sprintf("%.2f%%", mean(res$byHowMuch==50)*100)`) had slider values at exactly 0.5, and all but `r sum(res$byHowMuch == 50 & !res$ratioLabel %in% c(46.4, 56.2))` were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points  could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth. 
+While we were initially concerned that this effect was due to the slider initial setting of 0.5, we did examine this hypothesis; only `r sum(res$byHowMuch == 50)` responses (`r sprintf("%.2f%%", mean(res$byHowMuch==50)*100)`) had slider values at exactly 0.5, and all but `r sum(res$byHowMuch == 50 & !res$ratioLabel %in% c(46.4, 56.2))` were for ratios on either side of 0.5 (.464, .562). This suggests that while a few participants did take the strategy of using the default value for the slider, they did so strategically, not moving the slider only when the ratio was perceived to be sufficiently close to 0.5. In addition, trials where participants utilized this strategy were evenly split between separated and adjacent comparisons, suggesting that this anchoring process is not the reason for the difference in spline fits for the different comparison types. It seems more likely that this effect is at least partially due instead to lower errors around the extremes of the ratio spectrum. A follow-up experiment with more ratios and in particular ratio values closer to suspected anchor points  could explore this relationship in more depth - with only 7 different ratios, it is difficult to do more than note the appearance of an effect and speculate about the anchor points, particularly given that we have used spline models with 5 knots to fit the smooth. 
 
 
 \citeauthor{heerCrowdsourcingGraphicalPerception2010b} provided a zip file containing data and code for their paper, but this link has not been updated and is no longer active, so it is not possible to fit a similar model to their data for comparison purposes; if we could get access to their data, this would allow for investigating whether the differences identified in our model were an artifact of the measurement method (e.g. slider vs. numerical entry) or if this effect was present in previous studies and can now be identified because of more advanced statistical modeling techniques. 
@@ -879,7 +889,7 @@ res %>%
 Previous work in 3D graphics would suggest that the errors for the 3D graphs would be larger than the errors for the 2D graphs. 
 While we did not find any significant results indicating that 3D graphs are read less accurately, there are two possibilities that might account for this discrepancy. 
 
-The first potential explanation is that this study is underpowered - the effect size is small, and our 48 participants were insufficient; the original study included 51 participants, which is slightly larger. However, we should note that the analysis methods used in @heerCrowdsourcingGraphicalPerception2010b and @clevelandGraphical1984 do not provide numerical tests of statistical significance, instead defaulting to graphical displays which include confidence intervals.
+The first potential explanation is that this study is underpowered - the effect size is small, and our `r nrow(valid.users)` participants were insufficient; the original study included 51 participants, which is slightly larger. However, we should note that the analysis methods used in @heerCrowdsourcingGraphicalPerception2010b and @clevelandGraphical1984 do not provide numerical tests of statistical significance, instead defaulting to graphical displays which include confidence intervals.
 
 The second possibility is more interesting: we examined 3D charts using rendered 3D graphs and 3D printed charts; both of these options allow for participants to interact with the chart, rotating it, and generally perceiving it as one might perceive any other 3D, real, object.
 This is a far cry from the 3D perspective charts in the original study, which have a fixed angle and perspective and are thus not equivalent to our 3D charts. 
@@ -1035,4 +1045,7 @@ ggplot(mapping = aes(sample = r2)) +
   labs(x = 'Theoretical Quantiles',
        y = 'Sample Quantiles')
 ```
+
+
+
 
