@@ -569,10 +569,7 @@ Most of the subjects in the position-length experiment participated in the posit
 It seems likely that the authors recruited individuals within their respective departments as well as their wives.
 In order to replicate this atypical participant recruitment method in the modern era, members of the UNL Statistics department and their spouses, partners, and roommates were asked to participate in our study. 
 This replicates the spirit of the recruitment method without the implicit assumptions that graduate students and professors are male, heterosexual, and have unemployed spouses.
-
-A total of `r nrow(valid.users)` participants completed the study; demographics are shown in \Cref{fig:demographics}.
-The participants provided a total of `nrow(res_all)` responses.
-
+A total of `r length(unique(res_all$subject))` participants completed our study; demographics are shown in \Cref{fig:demographics}.
 
 
 
@@ -662,7 +659,18 @@ res %>%
 
 # Results
 
-All responses that incorrectly identified the smaller bar ($n = `r nrow(res_all) - nrow(res)`$) were removed from the study before analysis; this serves as a basic attention check and leaves `r nrow(res)` valid responses. In addition, one response was removed because the participant did not enter a valid ID for a 3D printed chart.
+```{r, include = F}
+res_sub_count <- res_all %>% 
+  group_by(subject) %>% 
+  count()
+```
+
+
+The participants provided a total of `r nrow(res_all)` responses.
+While each participant was provided with 15 trials, `r sum(res_sub_count$n < 15)` participants did not complete the entire experiment.
+All responses that incorrectly identified the smaller bar ($n = `r nrow(res_all) - nrow(res)`$) were removed from the study before analysis; this serves as a basic attention check and leaves `r nrow(res)` valid responses. 
+In addition, one response was removed because the participant did not enter a valid ID for a 3D printed chart.
+
 
 ## Midmeans of Log Absolute Errors
 \citeauthor{clevelandGraphical1984} used 
@@ -675,7 +683,7 @@ They also added 1/8 to prevent distortions when the errors were close to zero.
 \Cref{fig:midmeans-log-errors} shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type. 
 The results suggest that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. 
 
-```{r midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='\\textwidth'}
+```{r midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='\\textwidth', fig.height=3}
 plot.types = c('2D', 'Rendered 3D', '3D Printed')
 names(plot.types) = c('2dDigital', '3dDigital', '3dPrint')
 
@@ -813,7 +821,8 @@ newdata %>%
   
   geom_point(data = res, aes(x = ratioLabel/100, y = response, color = factor(type, levels = 1:2, labels = c("Separated", "Adjacent")))) +
   theme_bw() + ylab("Prediction") + xlab("True Proportion Difference") + 
-  xlim(c(0, 1))
+  xlim(c(0, 1)) + 
+  theme(legend.position = 'bottom')
 
 ```
 
