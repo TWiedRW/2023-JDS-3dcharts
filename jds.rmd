@@ -569,7 +569,7 @@ Most of the subjects in the position-length experiment participated in the posit
 It seems likely that the authors recruited individuals within their respective departments as well as their wives.
 In order to replicate this atypical participant recruitment method in the modern era, members of the UNL Statistics department and their spouses, partners, and roommates were asked to participate in our study. 
 This replicates the spirit of the recruitment method without the implicit assumptions that graduate students and professors are male, heterosexual, and have unemployed spouses.
-A total of `r length(unique(res_all$subject))` participants completed our study; demographics are shown in \Cref{fig:demographics}.
+A total of `r nrow(valid.users)` participants completed our study; demographics are shown in \Cref{fig:demographics}.
 
 
 
@@ -631,7 +631,7 @@ While the results of any sample with recruitment methodology like this are not g
 
 A Shiny applet was used for data collection, along with the provided kit of 3D printed charts.
 Participants provided informed consent through the applet, and then were asked for demographic information (age, gender, education level). 
-Then, participants were shown a "practice" page which allowed them to experiment with the data collection interface and practice estimating the ratio between the bars, as shown in \Cref{fig:practice}. This practice interface did not provide any feedback as to participant correctness, but was merely intended to familiarize the participants with the questions which would be asked as well as the process of estimating the ratio between the two bars.
+Then, participants were shown a "practice" page which allowed them to experiment with the data collection interface and practice estimating the ratio between the bars, as shown in \Cref{fig:practice}. This practice interface did not provide any numeric feedback as to participant correctness, but was merely intended to familiarize the participants with the questions which would be asked as well as the process of estimating the ratio between the two bars.
 
 ```{r practice, fig.cap = "Screenshot of Shiny application practice screen. Three 2D bar charts with different ratios were provided, along with sliders indicating the correct proportion. Participants could practice with the sliders and preview the questions that would be asked as part of the task.", out.width = "80%"}
 knitr::include_graphics("_images/03-Practice-2.png")
@@ -661,13 +661,13 @@ res %>%
 
 ```{r, include = F}
 res_sub_count <- res_all %>% 
-  group_by(subject) %>% 
+  group_by(nickname, participantUnique, appStartTime, subject) %>% 
   count()
 ```
 
 
 The participants provided a total of `r nrow(res_all)` responses.
-While each participant was provided with 15 trials, `r sum(res_sub_count$n < 15)` participants did not complete the entire experiment.
+While each participant was provided with 15 trials, `r sum(res_sub_count$n < 15)` participants partially completed the experiment; one participant did not advance beyond the demographic page. 
 All responses that incorrectly identified the smaller bar ($n = `r nrow(res_all) - nrow(res)`$) were removed from the study before analysis; this serves as a basic attention check and leaves `r nrow(res)` valid responses. 
 In addition, one response was removed because the participant did not enter a valid ID for a 3D printed chart.
 
